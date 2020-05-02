@@ -5,8 +5,22 @@ import Html exposing (Html, button, div, img, input, li, p, text, ul)
 import Html.Attributes as Attrs exposing (src)
 import Html.Events exposing (onClick, onInput)
 import Http
-import Json.Decode exposing (Decoder, field, int, list, map2, map3, string)
+import Json.Decode exposing (Decoder, field, int, list, map2, map3, map4, string)
 import Menu
+
+
+type alias RefValue =
+    { name : String
+    , url : String
+    }
+
+
+type alias Pokemon =
+    { name : String
+    , order : Int
+    , abilites : List RefValue
+    , types : List RefValue
+    }
 
 
 type alias Model =
@@ -17,6 +31,7 @@ type alias Model =
     , howManyToShow : Int
     , pokemonList : List PokeListResult
     , showMenu : Bool
+    , selectedMon : Maybe Pokemon
     }
 
 
@@ -39,6 +54,7 @@ init _ =
       , howManyToShow = 5
       , pokemonList = []
       , showMenu = False
+      , selectedMon = Nothing
       }
     , Cmd.none
     )
@@ -50,6 +66,8 @@ type Msg
     | SetAutoCompleteState Menu.Msg
     | SetQuery String
     | SelectPokemon String
+    | LookupPokemon String
+    | GotPokemon (Result Http.Error Pokemon)
 
 
 buildErrorMessage : Http.Error -> String
@@ -106,6 +124,19 @@ update msg model =
         SendHttpRequest ->
             ( model, getPokemons )
 
+        LookupPokemon url ->
+            ( model, getPokemon url )
+
+        GotPokemon (Ok pkmn) ->
+            ( { model
+                | selectedMon = Just pkmn
+              }
+            , Cmd.none
+            )
+
+        GotPokemon (Err errMessage) ->
+            ( { model | monses = Nothing, errorMessage = Just (buildErrorMessage errMessage) }, Cmd.none )
+
         GotMons (Ok monses) ->
             ( { model
                 | monses = Just monses
@@ -130,16 +161,25 @@ update msg model =
             )
 
         SelectPokemon id ->
-            ( { model
-                | query =
+            let
+                newMonMaybe =
                     List.filter (\poke -> poke.name == id) model.pokemonList
                         |> List.head
+            in
+            ( { model
+                | query =
+                    newMonMaybe
                         |> Maybe.withDefault (PokeListResult "unown" "nourl")
                         |> .name
                 , autoState = Menu.empty
                 , showMenu = False
               }
-            , Cmd.none
+            , case newMonMaybe of
+                Just pk ->
+                    getPokemon pk.url
+
+                Nothing ->
+                    Cmd.none
             )
 
 
@@ -176,12 +216,19 @@ pokeApiSpecies =
     "/api/v2/pokemon-species/"
 
 
-
 getPokemons : Cmd Msg
 getPokemons =
     Http.get
         { url = pokeApiBase ++ pokeApiSpecies
         , expect = Http.expectJson GotMons pokeListDecoder
+        }
+
+
+getPokemon : String -> Cmd Msg
+getPokemon url =
+    Http.get
+        { url = url
+        , expect = Http.expectJson GotPokemon pokemonDecoder
         }
 
 
@@ -196,6 +243,22 @@ type alias PokeList =
     , next : String
     , results : List PokeListResult
     }
+
+
+refValDecoder : Decoder RefValue
+refValDecoder =
+    map2 PokeListResult
+        (field "name" string)
+        (field "url" string)
+
+
+pokemonDecoder : Decoder Pokemon
+pokemonDecoder =
+    map4 Pokemon
+        (field "name" string)
+        (field "order" int)
+        (field "abilities" (list refValDecoder))
+        (field "types" (list refValDecoder))
 
 
 pokeListResultDecoder : Decoder PokeListResult
@@ -213,6 +276,19 @@ pokeListDecoder =
         (field "results" (list pokeListResultDecoder))
 
 
+displayMon : Maybe Pokemon -> Html Msg
+displayMon pkmn =
+    case pkmn of
+        Just mon ->
+            div []
+                [ p [] [ text ("name: " ++ mon.name) ]
+                , li [] (List.map (\t -> li [] [ text t.name ]) mon.types)
+                ]
+
+        Nothing ->
+            div [] []
+
+
 pokemonSelect : Model -> Html Msg
 pokemonSelect model =
     div []
@@ -228,6 +304,7 @@ pokemonSelect model =
 
           else
             Html.div [] []
+        , displayMon model.selectedMon
         ]
 
 
