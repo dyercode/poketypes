@@ -36,7 +36,7 @@ init _ =
       , errorMessage = Nothing
       , autoState = Menu.empty
       , query = ""
-      , howManyToShow = 0
+      , howManyToShow = 5
       , pokemonList = []
       , showMenu = False
       }
@@ -100,6 +100,7 @@ acceptablePokemon query pokemon =
     List.filter (String.contains lowerQuery << String.toLower << .name) pokemon
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SendHttpRequest ->
@@ -118,7 +119,7 @@ update msg model =
 
         SetAutoCompleteState autoMsg ->
             let
-                ( newState, maybeMsg ) =
+                ( newState, _ ) =
                     Menu.update updateConfig autoMsg model.howManyToShow model.autoState (acceptablePokemon model.query model.pokemonList)
             in
             ( { model | autoState = newState }, Cmd.none )
@@ -165,18 +166,15 @@ view model =
         ]
 
 
+pokeApiBase : String
 pokeApiBase =
     "https://pokeapi.co"
 
 
+pokeApiSpecies : String
 pokeApiSpecies =
     "/api/v2/pokemon-species/"
 
-
-
---type Response
---    = GotMon (Result Http.Error String)
---    | GotMons (Result Http.Error (List String))
 
 
 getPokemons : Cmd Msg
@@ -188,7 +186,9 @@ getPokemons =
 
 
 type alias PokeListResult =
-    { name : String, url : String }
+    { name : String
+    , url : String
+    }
 
 
 type alias PokeList =
@@ -213,6 +213,7 @@ pokeListDecoder =
         (field "results" (list pokeListResultDecoder))
 
 
+pokemonSelect : Model -> Html Msg
 pokemonSelect model =
     div []
         [ img [ src "./media/pokemon/icons/0.png" ] []
