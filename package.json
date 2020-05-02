@@ -8,6 +8,7 @@
     "build": "parcel build src/index.html"
   },
   "devDependencies": {
+    "elm-analyse": "^0.16.5",
     "elm-format": "^0.8.3",
     "elm-hot": "^1.1.4",
     "node-elm-compiler": "^5.0.4",

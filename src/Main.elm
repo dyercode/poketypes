@@ -29,7 +29,7 @@ type alias Model =
     , autoState : Menu.State
     , query : String
     , howManyToShow : Int
-    , pokemonList : List PokeListResult
+    , pokemonList : List RefValue
     , showMenu : Bool
     , selectedMon : Maybe Pokemon
     }
@@ -89,7 +89,7 @@ buildErrorMessage httpError =
             message
 
 
-updateConfig : Menu.UpdateConfig Msg PokeListResult
+updateConfig : Menu.UpdateConfig Msg RefValue
 updateConfig =
     Menu.updateConfig
         { toId = .name
@@ -109,7 +109,7 @@ updateConfig =
         }
 
 
-acceptablePokemon : String -> List PokeListResult -> List PokeListResult
+acceptablePokemon : String -> List RefValue -> List RefValue
 acceptablePokemon query pokemon =
     let
         lowerQuery =
@@ -178,7 +178,7 @@ update msg model =
             ( { model
                 | query =
                     newMonMaybe
-                        |> Maybe.withDefault (PokeListResult "unown" "nourl")
+                        |> Maybe.withDefault (RefValue "unown" "nourl")
                         |> .name
                 , autoState = Menu.empty
                 , showMenu = False
@@ -208,10 +208,6 @@ view model =
                         (\n -> li [] [ text n.name ])
                         m.results
                     )
-
-        --, button [ onClick Decrement ] [ text "-" ]
-        --, div [] [ text (String.fromInt model) ]
-        --, button [ onClick Increment ] [ text "+" ]
         ]
 
 
@@ -246,29 +242,23 @@ getPokemon name =
         }
 
 
-type alias PokeListResult =
-    { name : String
-    , url : String
-    }
-
-
 type alias PokeList =
     { count : Int
     , next : String
-    , results : List PokeListResult
+    , results : List RefValue
     }
 
 
 refValDecoder : Decoder RefValue
 refValDecoder =
-    map2 PokeListResult
+    map2 RefValue
         (field "name" string)
         (field "url" string)
 
 
 listRefValDecoder : String -> Decoder RefValue
 listRefValDecoder key =
-    map2 PokeListResult
+    map2 RefValue
         (at [ key, "name" ] string)
         (at [ key, "url" ] string)
 
@@ -282,19 +272,12 @@ pokemonDecoder =
         (field "types" (list (listRefValDecoder "type")))
 
 
-pokeListResultDecoder : Decoder PokeListResult
-pokeListResultDecoder =
-    map2 PokeListResult
-        (field "name" string)
-        (field "url" string)
-
-
 pokeListDecoder : Decoder PokeList
 pokeListDecoder =
     map3 PokeList
         (field "count" int)
         (field "next" string)
-        (field "results" (list pokeListResultDecoder))
+        (field "results" (list refValDecoder))
 
 
 displayMon : Maybe Pokemon -> Html Msg
@@ -329,7 +312,7 @@ pokemonSelect model =
         ]
 
 
-viewConfig : Menu.ViewConfig PokeListResult
+viewConfig : Menu.ViewConfig RefValue
 viewConfig =
     let
         customizedLi keySelected mouseSelected pkmn =
