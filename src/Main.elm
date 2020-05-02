@@ -5,7 +5,7 @@ import Html exposing (Html, button, div, img, input, li, p, text, ul)
 import Html.Attributes as Attrs exposing (src)
 import Html.Events exposing (onClick, onInput)
 import Http
-import Json.Decode exposing (Decoder, at, field, int, list, map2, map3, map4, string)
+import Json.Decode exposing (Decoder, at, field, int, list, map2, map3, map4, map5, string)
 import Menu
 
 
@@ -20,6 +20,7 @@ type alias Pokemon =
     , order : Int
     , abilites : List RefValue
     , types : List RefValue
+    , moves : List RefValue
     }
 
 
@@ -265,11 +266,12 @@ listRefValDecoder key =
 
 pokemonDecoder : Decoder Pokemon
 pokemonDecoder =
-    map4 Pokemon
+    map5 Pokemon
         (field "name" string)
         (field "order" int)
         (field "abilities" (list (listRefValDecoder "ability")))
         (field "types" (list (listRefValDecoder "type")))
+        (field "moves" (list (listRefValDecoder "move")))
 
 
 pokeListDecoder : Decoder PokeList
@@ -287,6 +289,7 @@ displayMon pkmn =
             div []
                 [ p [] [ text ("(#" ++ String.fromInt mon.order ++ ") " ++ mon.name) ]
                 , ul [] (List.map (\t -> li [] [ text t.name ]) mon.types)
+                , ul [] (List.map (\t -> li [] [ text t.name ]) mon.moves)
                 ]
 
         Nothing ->
