@@ -5,7 +5,7 @@ import Html exposing (Html, button, div, img, input, li, p, text, ul)
 import Html.Attributes as Attrs exposing (src)
 import Html.Events exposing (onClick, onInput)
 import Http
-import Json.Decode exposing (Decoder, field, int, list, map2, map3, map4, string)
+import Json.Decode exposing (Decoder, at, field, int, list, map2, map3, map4, string)
 import Menu
 
 
@@ -124,8 +124,8 @@ update msg model =
         SendHttpRequest ->
             ( model, getPokemons )
 
-        LookupPokemon url ->
-            ( model, getPokemon url )
+        LookupPokemon name ->
+            ( model, getPokemon name )
 
         GotPokemon (Ok pkmn) ->
             ( { model
@@ -150,10 +150,19 @@ update msg model =
 
         SetAutoCompleteState autoMsg ->
             let
-                ( newState, _ ) =
-                    Menu.update updateConfig autoMsg model.howManyToShow model.autoState (acceptablePokemon model.query model.pokemonList)
+                ( newState, maybeMsg ) =
+                    Menu.update updateConfig
+                        autoMsg
+                        model.howManyToShow
+                        model.autoState
+                        (acceptablePokemon model.query model.pokemonList)
+
+                newModel =
+                    { model | autoState = newState }
             in
-            ( { model | autoState = newState }, Cmd.none )
+            maybeMsg
+                |> Maybe.map (\updateMsg -> update updateMsg newModel)
+                |> Maybe.withDefault ( newModel, Cmd.none )
 
         SetQuery newQuery ->
             ( { model | query = newQuery, showMenu = True }
@@ -176,7 +185,7 @@ update msg model =
               }
             , case newMonMaybe of
                 Just pk ->
-                    getPokemon pk.url
+                    getPokemon pk.name
 
                 Nothing ->
                     Cmd.none
@@ -216,6 +225,11 @@ pokeApiSpecies =
     "/api/v2/pokemon-species/"
 
 
+pokeApiPokemon : String
+pokeApiPokemon =
+    "/api/v2/pokemon/"
+
+
 getPokemons : Cmd Msg
 getPokemons =
     Http.get
@@ -225,9 +239,9 @@ getPokemons =
 
 
 getPokemon : String -> Cmd Msg
-getPokemon url =
+getPokemon name =
     Http.get
-        { url = url
+        { url = pokeApiBase ++ pokeApiPokemon ++ name
         , expect = Http.expectJson GotPokemon pokemonDecoder
         }
 
@@ -252,13 +266,20 @@ refValDecoder =
         (field "url" string)
 
 
+listRefValDecoder : String -> Decoder RefValue
+listRefValDecoder key =
+    map2 PokeListResult
+        (at [ key, "name" ] string)
+        (at [ key, "url" ] string)
+
+
 pokemonDecoder : Decoder Pokemon
 pokemonDecoder =
     map4 Pokemon
         (field "name" string)
         (field "order" int)
-        (field "abilities" (list refValDecoder))
-        (field "types" (list refValDecoder))
+        (field "abilities" (list (listRefValDecoder "ability")))
+        (field "types" (list (listRefValDecoder "type")))
 
 
 pokeListResultDecoder : Decoder PokeListResult
@@ -281,8 +302,8 @@ displayMon pkmn =
     case pkmn of
         Just mon ->
             div []
-                [ p [] [ text ("name: " ++ mon.name) ]
-                , li [] (List.map (\t -> li [] [ text t.name ]) mon.types)
+                [ p [] [ text ("(#" ++ String.fromInt mon.order ++ ") " ++ mon.name) ]
+                , ul [] (List.map (\t -> li [] [ text t.name ]) mon.types)
                 ]
 
         Nothing ->
