@@ -1,31 +1,17 @@
 module Main exposing (main)
 
 import Browser
+import Decoders exposing (pokeListDecoder, pokemonDecoder)
 import Html exposing (Html, button, div, img, input, li, p, text, ul)
 import Html.Attributes as Attrs exposing (src)
 import Html.Events exposing (onClick, onInput)
 import Http
-import Json.Decode exposing (Decoder, at, field, int, list, map2, map3, map4, map5, string)
 import Menu
-
-
-type alias RefValue =
-    { name : String
-    , url : String
-    }
-
-
-type alias Pokemon =
-    { name : String
-    , order : Int
-    , abilites : List RefValue
-    , types : List RefValue
-    , moves : List RefValue
-    }
+import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
 
 
 type alias Model =
-    { monses : Maybe PokeList
+    { pokedex : Maybe PokeList
     , errorMessage : Maybe String
     , autoState : Menu.State
     , query : String
@@ -48,7 +34,7 @@ main =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { monses = Nothing
+    ( { pokedex = Nothing
       , errorMessage = Nothing
       , autoState = Menu.empty
       , query = ""
@@ -62,13 +48,13 @@ init _ =
 
 
 type Msg
-    = SendHttpRequest
-    | GotMons (Result Http.Error PokeList)
+    = GetPokemonList String
+    | GetPokemon String
+    | GotPokeList (Result Http.Error PokeList)
+    | GotPokemon (Result Http.Error Pokemon)
     | SetAutoCompleteState Menu.Msg
     | SetQuery String
     | SelectPokemon String
-    | LookupPokemon String
-    | GotPokemon (Result Http.Error Pokemon)
 
 
 buildErrorMessage : Http.Error -> String
@@ -122,32 +108,39 @@ acceptablePokemon query pokemon =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SendHttpRequest ->
-            ( model, getPokemons )
+        GetPokemonList url ->
+            ( model, getPokemons url )
 
-        LookupPokemon name ->
+        GetPokemon name ->
             ( model, getPokemon name )
 
         GotPokemon (Ok pkmn) ->
-            ( { model
-                | selectedMon = Just pkmn
-              }
+            ( { model | selectedMon = Just pkmn }
             , Cmd.none
             )
 
         GotPokemon (Err errMessage) ->
-            ( { model | monses = Nothing, errorMessage = Just (buildErrorMessage errMessage) }, Cmd.none )
+            ( { model | pokedex = Nothing, errorMessage = Just (buildErrorMessage errMessage) }, Cmd.none )
 
-        GotMons (Ok monses) ->
+        GotPokeList (Ok pokedex) ->
+            let
+                followUp =
+                    case pokedex.next of
+                        Just n ->
+                            getPokemons n
+
+                        Nothing ->
+                            Cmd.none
+            in
             ( { model
-                | monses = Just monses
-                , pokemonList = List.append model.pokemonList monses.results
+                | pokedex = Just pokedex
+                , pokemonList = List.append model.pokemonList pokedex.results
               }
-            , Cmd.none
+            , followUp
             )
 
-        GotMons (Err errMessage) ->
-            ( { model | monses = Nothing, errorMessage = Just (buildErrorMessage errMessage) }, Cmd.none )
+        GotPokeList (Err errMessage) ->
+            ( { model | pokedex = Nothing, errorMessage = Just (buildErrorMessage errMessage) }, Cmd.none )
 
         SetAutoCompleteState autoMsg ->
             let
@@ -166,9 +159,7 @@ update msg model =
                 |> Maybe.withDefault ( newModel, Cmd.none )
 
         SetQuery newQuery ->
-            ( { model | query = newQuery, showMenu = True }
-            , Cmd.none
-            )
+            ( { model | query = newQuery, showMenu = True }, Cmd.none )
 
         SelectPokemon id ->
             let
@@ -197,18 +188,15 @@ view : Model -> Html Msg
 view model =
     div []
         [ pokemonSelect model
-        , button [ onClick SendHttpRequest ]
+        , button [ onClick (GetPokemonList (pokeApiBase ++ pokeApiSpecies)) ]
             [ text "get em all" ]
-        , case model.monses of
+        , case model.pokedex of
             Nothing ->
                 p [] [ text "ain't got none" ]
 
             Just m ->
                 ul []
-                    (List.map
-                        (\n -> li [] [ text n.name ])
-                        m.results
-                    )
+                    (List.map (\n -> li [] [ text n.name ]) model.pokemonList)
         ]
 
 
@@ -219,7 +207,7 @@ pokeApiBase =
 
 pokeApiSpecies : String
 pokeApiSpecies =
-    "/api/v2/pokemon-species/"
+    "/api/v2/pokemon-species/?limit=100"
 
 
 pokeApiPokemon : String
@@ -227,11 +215,11 @@ pokeApiPokemon =
     "/api/v2/pokemon/"
 
 
-getPokemons : Cmd Msg
-getPokemons =
+getPokemons : String -> Cmd Msg
+getPokemons url =
     Http.get
-        { url = pokeApiBase ++ pokeApiSpecies
-        , expect = Http.expectJson GotMons pokeListDecoder
+        { url = url
+        , expect = Http.expectJson GotPokeList pokeListDecoder
         }
 
 
@@ -243,45 +231,6 @@ getPokemon name =
         }
 
 
-type alias PokeList =
-    { count : Int
-    , next : String
-    , results : List RefValue
-    }
-
-
-refValDecoder : Decoder RefValue
-refValDecoder =
-    map2 RefValue
-        (field "name" string)
-        (field "url" string)
-
-
-listRefValDecoder : String -> Decoder RefValue
-listRefValDecoder key =
-    map2 RefValue
-        (at [ key, "name" ] string)
-        (at [ key, "url" ] string)
-
-
-pokemonDecoder : Decoder Pokemon
-pokemonDecoder =
-    map5 Pokemon
-        (field "name" string)
-        (field "order" int)
-        (field "abilities" (list (listRefValDecoder "ability")))
-        (field "types" (list (listRefValDecoder "type")))
-        (field "moves" (list (listRefValDecoder "move")))
-
-
-pokeListDecoder : Decoder PokeList
-pokeListDecoder =
-    map3 PokeList
-        (field "count" int)
-        (field "next" string)
-        (field "results" (list refValDecoder))
-
-
 displayMon : Maybe Pokemon -> Html Msg
 displayMon pkmn =
     case pkmn of
@@ -289,7 +238,6 @@ displayMon pkmn =
             div []
                 [ p [] [ text ("(#" ++ String.fromInt mon.order ++ ") " ++ mon.name) ]
                 , ul [] (List.map (\t -> li [] [ text t.name ]) mon.types)
-                , ul [] (List.map (\t -> li [] [ text t.name ]) mon.moves)
                 ]
 
         Nothing ->
