@@ -190,11 +190,11 @@ view model =
         [ pokemonSelect model
         , button [ onClick (GetPokemonList (pokeApiBase ++ pokeApiSpecies)) ]
             [ text "get em all" ]
-        , case model.pokedex of
-            Nothing ->
+        , case List.isEmpty model.pokemonList of
+            True ->
                 p [] [ text "ain't got none" ]
 
-            Just m ->
+            False ->
                 ul []
                     (List.map (\n -> li [] [ text n.name ]) model.pokemonList)
         ]
