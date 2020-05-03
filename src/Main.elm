@@ -49,7 +49,6 @@ init _ =
 
 type Msg
     = GetPokemonList String
-    | GetPokemon String
     | GotPokeList (Result Http.Error PokeList)
     | GotPokemon (Result Http.Error Pokemon)
     | SetAutoCompleteState Menu.Msg
@@ -110,9 +109,6 @@ update msg model =
     case msg of
         GetPokemonList url ->
             ( model, getPokemons url )
-
-        GetPokemon name ->
-            ( model, getPokemon name )
 
         GotPokemon (Ok pkmn) ->
             ( { model | selectedMon = Just pkmn }
@@ -176,8 +172,8 @@ update msg model =
                 , showMenu = False
               }
             , case newMonMaybe of
-                Just pk ->
-                    getPokemon pk.name
+                Just pkmn ->
+                    getPokemon pkmn.name
 
                 Nothing ->
                     Cmd.none

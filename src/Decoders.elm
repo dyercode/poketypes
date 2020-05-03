@@ -1,4 +1,4 @@
-module Decoders exposing (..)
+module Decoders exposing (listRefValDecoder, pokeListDecoder, pokemonDecoder, refValDecoder)
 
 import Json.Decode exposing (Decoder, at, field, int, list, map2, map3, map5, maybe, string)
 import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)

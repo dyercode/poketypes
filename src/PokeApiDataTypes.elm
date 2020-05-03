@@ -1,4 +1,4 @@
-module PokeApiDataTypes exposing (..)
+module PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
 
 
 type alias PokeList =
