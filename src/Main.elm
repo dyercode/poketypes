@@ -10,15 +10,20 @@ import Menu
 import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
 
 
+type alias Autocomplete =
+    { query : String
+    , autoState : Menu.State
+    , howManyToShow : Int
+    , showMenu : Bool
+    }
+
+
 type alias Model =
     { pokedex : Maybe PokeList
     , errorMessage : Maybe String
-    , autoState : Menu.State
-    , query : String
-    , howManyToShow : Int
     , pokemonList : List RefValue
-    , showMenu : Bool
     , selectedMon : Maybe Pokemon
+    , autocomplete : Autocomplete
     }
 
 
@@ -36,11 +41,13 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     ( { pokedex = Nothing
       , errorMessage = Nothing
-      , autoState = Menu.empty
-      , query = ""
-      , howManyToShow = 5
+      , autocomplete =
+            { autoState = Menu.empty
+            , query = ""
+            , howManyToShow = 5
+            , showMenu = False
+            }
       , pokemonList = []
-      , showMenu = False
       , selectedMon = Nothing
       }
     , Cmd.none
@@ -143,33 +150,48 @@ update msg model =
                 ( newState, maybeMsg ) =
                     Menu.update updateConfig
                         autoMsg
-                        model.howManyToShow
-                        model.autoState
-                        (acceptablePokemon model.query model.pokemonList)
+                        model.autocomplete.howManyToShow
+                        model.autocomplete.autoState
+                        (acceptablePokemon model.autocomplete.query model.pokemonList)
+
+                autocomplete =
+                    model.autocomplete
 
                 newModel =
-                    { model | autoState = newState }
+                    { model | autocomplete = { autocomplete | autoState = newState } }
             in
             maybeMsg
                 |> Maybe.map (\updateMsg -> update updateMsg newModel)
                 |> Maybe.withDefault ( newModel, Cmd.none )
 
         SetQuery newQuery ->
-            ( { model | query = newQuery, showMenu = True }, Cmd.none )
+            let
+                autocomplete =
+                    model.autocomplete
+            in
+            ( { model | autocomplete = { autocomplete | query = newQuery, showMenu = True } }
+            , Cmd.none
+            )
 
         SelectPokemon id ->
             let
                 newMonMaybe =
                     List.filter (\poke -> poke.name == id) model.pokemonList
                         |> List.head
+
+                autocomplete =
+                    model.autocomplete
             in
             ( { model
-                | query =
-                    newMonMaybe
-                        |> Maybe.withDefault (RefValue "unown" "nourl")
-                        |> .name
-                , autoState = Menu.empty
-                , showMenu = False
+                | autocomplete =
+                    { autocomplete
+                        | query =
+                            newMonMaybe
+                                |> Maybe.withDefault (RefValue "unown" "nourl")
+                                |> .name
+                        , autoState = Menu.empty
+                        , showMenu = False
+                    }
               }
             , case newMonMaybe of
                 Just pkmn ->
@@ -183,7 +205,7 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ pokemonSelect model
+        [ pokemonSelect model.autocomplete model.pokemonList model.selectedMon
         , button [ onClick (GetPokemonList (pokeApiBase ++ pokeApiSpecies)) ]
             [ text "get em all" ]
         , case List.isEmpty model.pokemonList of
@@ -240,8 +262,8 @@ displayMon pkmn =
             div [] []
 
 
-pokemonSelect : Model -> Html Msg
-pokemonSelect model =
+pokemonSelect : Autocomplete -> List RefValue -> Maybe Pokemon -> Html Msg
+pokemonSelect model pokeList maybeMon =
     div []
         [ img [ src "./media/pokemon/icons/0.png" ] []
         , input
@@ -251,11 +273,11 @@ pokemonSelect model =
             ]
             []
         , if model.showMenu then
-            viewMenu model
+            viewMenu model pokeList
 
           else
             Html.div [] []
-        , displayMon model.selectedMon
+        , displayMon maybeMon
         ]
 
 
@@ -280,12 +302,12 @@ viewConfig =
         }
 
 
-viewMenu : Model -> Html.Html Msg
-viewMenu model =
+viewMenu : Autocomplete -> List RefValue -> Html.Html Msg
+viewMenu model pokemons =
     Html.div [ Attrs.class "autocomplete-menu" ]
         [ Html.map SetAutoCompleteState <|
             Menu.view viewConfig
                 model.howManyToShow
                 model.autoState
-                (acceptablePokemon model.query model.pokemonList)
+                (acceptablePokemon model.query pokemons)
         ]
