@@ -2,10 +2,10 @@ module Main exposing (main)
 
 import Browser
 import Decoders exposing (pokeListDecoder, pokemonDecoder)
-import Dropdown exposing (Autocomplete, DropdownId, bareMinSingleThing)
-import Html exposing (Html, button, div, img, input, li, p, text, ul)
-import Html.Attributes as Attrs exposing (id, src)
-import Html.Events exposing (onClick, onInput)
+import Dropdown
+import Html exposing (Html, button, div, li, p, text, ul)
+import Html.Attributes as Attrs exposing (id)
+import Html.Events exposing (onClick)
 import Http
 import Menu
 import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
@@ -14,7 +14,7 @@ import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
 type alias PokemonSelectConfig r =
     { r
         | howManyToShow : Int
-        , dropDownOpen : Maybe DropdownId
+        , dropDownOpen : Maybe String
     }
 
 
@@ -23,9 +23,9 @@ type alias Model =
     , errorMessage : Maybe String
     , pokemonList : List RefValue
     , selectedMon : Maybe Pokemon
-    , autocomplete : List Autocomplete
-    , dropDownOpen : Maybe DropdownId
+    , dropDownOpen : Maybe String
     , howManyToShow : Int
+    , dropdown : Dropdown.Model
     }
 
 
@@ -39,24 +39,24 @@ main =
         }
 
 
-defaultPokeSelectAuto : Autocomplete
-defaultPokeSelectAuto =
-    { autoState = Menu.empty
-    , query = ""
-    , id = ""
-    }
 
-
-initPokeSelectAuto : List Autocomplete
-initPokeSelectAuto =
-    List.indexedMap (\thing1 thing2 -> { thing2 | id = String.fromInt thing1 }) (List.repeat 6 defaultPokeSelectAuto)
+-- defaultPokeSelectAuto : Autocomplete
+-- defaultPokeSelectAuto =
+-- { autoState = Menu.empty
+-- , query = ""
+-- , id = ""
+-- }
+-- initPokeSelectAuto : List Autocomplete
+-- initPokeSelectAuto =
+-- List.indexedMap (\thing1 thing2 -> { thing2 | id = String.fromInt thing1 }) (List.repeat 6 defaultPokeSelectAuto)
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { pokedex = Nothing
       , errorMessage = Nothing
-      , autocomplete = initPokeSelectAuto
+
+      --   , autocomplete = initPokeSelectAuto
       , pokemonList = []
       , selectedMon = Nothing
       , dropDownOpen = Nothing
@@ -162,6 +162,9 @@ update msg model =
         GotPokeList (Err errMessage) ->
             ( { model | pokedex = Nothing, errorMessage = Just (buildErrorMessage errMessage) }, Cmd.none )
 
+        GotTeam Dropdown.Msg ->
+            Dropdown.update
+
 
 
 --SetAutoCompleteState autoMsg ->
@@ -222,16 +225,15 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ pokemonSelect model.autocomplete model.pokemonList model.selectedMon
+        [ Dropdown.view model.dropdown
         , button [ onClick (GetPokemonList (pokeApiBase ++ pokeApiSpecies)) ]
             [ text "get em all" ]
-        , case List.isEmpty model.pokemonList of
-            True ->
-                p [] [ text "ain't got none" ]
+        , if List.isEmpty model.pokemonList then
+            p [] [ text "ain't got none" ]
 
-            False ->
-                ul []
-                    (List.map (\n -> li [] [ text n.name ]) model.pokemonList)
+          else
+            ul []
+                (List.map (\n -> li [] [ text n.name ]) model.pokemonList)
         ]
 
 

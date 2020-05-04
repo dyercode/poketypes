@@ -1,44 +1,14 @@
-module Dropdown exposing (Autocomplete, DropdownId, Msg, bareMinSingleThing)
+module Dropdown exposing (Model, Msg, update, view)
 
 import Html exposing (Html, div, img, input)
 import Html.Attributes as Attrs exposing (id, src)
 import Html.Events exposing (onInput)
-import Menu exposing (Msg)
+import Menu
 import PokeApiDataTypes exposing (Pokemon, RefValue)
 
 
-
---                   pokemon auto  -> text   -> dropdownOpen -> element
-type alias Model =
-    {
-     team: List Pokemon
-     , selections: List Autocomplete
-
-    }
-
-updatePokeSelectionQuery: String -> query -> List Autocomplete -> List Autocomplete
-updatePokeSelectionQuery id newQuery current =
-    List.map
-        (\autocomplete ->
-        if autocomplete.id == id then
-            {autocomplete | query = newQuery}
-        else
-            autocomplete
-        )
-        current
-
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        SetQuery id text ->
-            (GotTeam (updatePokeSelectionQuery id text model.selections), Cmd.none)
-
-        SetAutoCompleteState ->
-
-type alias DropdownId =
-    String
+type Msg
+    = SetQuery String String
 
 
 type alias Autocomplete =
@@ -48,24 +18,60 @@ type alias Autocomplete =
     }
 
 
-type Msg
-    = SetAutoCompleteState
-    | SetQuery String String
+type alias Model =
+    { team : List Pokemon
+    , selections : List Autocomplete
+    }
+
+
+updatePokeSelectionQuery : String -> String -> Model -> Model
+updatePokeSelectionQuery id newQuery current =
+    let
+        newAutocompletes =
+            List.map
+                (\selection ->
+                    if selection.id == id then
+                        { selection | query = newQuery }
+
+                    else
+                        selection
+                )
+                current.selections
+    in
+    { current | selections = newAutocompletes }
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        SetQuery id text ->
+            ( updatePokeSelectionQuery id text model, Cmd.none )
+
+
+
+-- SetAutoCompleteState ->
+-- ( model, Cmd.none )
+
+
+view : Model -> Html Msg
+view model =
+    pokemonSelect model.selections [] Nothing
 
 
 setQueryById : String -> (String -> Msg)
 setQueryById id =
     SetQuery id
 
-bareMinSingleThing : List RefValue -> String -> Bool -> String -> Html msg
-bareMinSingleThing pokemonList query droppedDown selectId =
+
+bareMinSingleThing : List RefValue -> Autocomplete -> Html Msg
+bareMinSingleThing pokemonList autocomplete =
     div []
         [ img [ src "./media/pokemon/icons/0.png" ] []
         , input
-            [ onInput (setQueryById selectId)
+            [ onInput (setQueryById autocomplete.id)
             , Attrs.class "autocomplete-input"
-            , Attrs.value query
-            , id ("pookers" ++ selectId)
+            , Attrs.value autocomplete.query
+            , id ("pookers" ++ autocomplete.id)
             ]
             []
         ]
@@ -76,7 +82,7 @@ pokemonSelect models pokeList maybeMon =
     div []
         (List.map
             (\model ->
-                bareMinSingleThing pokeList model.query False model.id
+                bareMinSingleThing pokeList model
              --div
              --[]
              --[ img [ src "./media/pokemon/icons/0.png" ] []
