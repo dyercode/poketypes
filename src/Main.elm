@@ -2,10 +2,9 @@ module Main exposing (main)
 
 import Browser
 import Decoders exposing (pokeListDecoder, pokemonDecoder)
-import Dropdown
-import Html exposing (Html, button, div, li, p, text, ul)
-import Html.Attributes as Attrs exposing (id)
-import Html.Events exposing (onClick)
+import Html exposing (Html, button, div, li, p, text, ul, img, input)
+import Html.Attributes as Attrs exposing (id, src)
+import Html.Events exposing (onClick, onInput)
 import Http
 import Menu
 import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
@@ -18,6 +17,13 @@ type alias PokemonSelectConfig r =
     }
 
 
+type alias Autocomplete =
+    { query : String
+    , autoState : Menu.State
+    , id : String
+    }
+
+
 type alias Model =
     { pokedex : Maybe PokeList
     , errorMessage : Maybe String
@@ -25,7 +31,7 @@ type alias Model =
     , selectedMon : Maybe Pokemon
     , dropDownOpen : Maybe String
     , howManyToShow : Int
-    , dropdown : Dropdown.Model
+    , selections : List Autocomplete
     }
 
 
@@ -40,15 +46,15 @@ main =
 
 
 
--- defaultPokeSelectAuto : Autocomplete
--- defaultPokeSelectAuto =
--- { autoState = Menu.empty
--- , query = ""
--- , id = ""
--- }
--- initPokeSelectAuto : List Autocomplete
--- initPokeSelectAuto =
--- List.indexedMap (\thing1 thing2 -> { thing2 | id = String.fromInt thing1 }) (List.repeat 6 defaultPokeSelectAuto)
+defaultPokeSelectAuto : Autocomplete
+defaultPokeSelectAuto =
+    { autoState = Menu.empty
+    , query = ""
+    , id = ""
+    }
+initPokeSelectAuto : List Autocomplete
+initPokeSelectAuto =
+    List.indexedMap (\thing1 thing2 -> { thing2 | id = String.fromInt thing1 }) (List.repeat 6 defaultPokeSelectAuto)
 
 
 init : () -> ( Model, Cmd Msg )
@@ -58,6 +64,7 @@ init _ =
 
       --   , autocomplete = initPokeSelectAuto
       , pokemonList = []
+      , selections = initPokeSelectAuto
       , selectedMon = Nothing
       , dropDownOpen = Nothing
       , howManyToShow = 5
@@ -70,7 +77,7 @@ type Msg
     = GetPokemonList String
     | GotPokeList (Result Http.Error PokeList)
     | GotPokemon (Result Http.Error Pokemon)
-    | GotTeam Dropdown.Msg
+    | SetQuery String String
 
 
 
@@ -162,8 +169,8 @@ update msg model =
         GotPokeList (Err errMessage) ->
             ( { model | pokedex = Nothing, errorMessage = Just (buildErrorMessage errMessage) }, Cmd.none )
 
-        GotTeam Dropdown.Msg ->
-            Dropdown.update
+        SetQuery id text ->
+            ( updatePokeSelectionQuery id text model, Cmd.none )
 
 
 
@@ -225,7 +232,7 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ Dropdown.view model.dropdown
+        [ pokemonSelect model.selections [] Nothing
         , button [ onClick (GetPokemonList (pokeApiBase ++ pokeApiSpecies)) ]
             [ text "get em all" ]
         , if List.isEmpty model.pokemonList then
@@ -312,3 +319,67 @@ viewConfig =
 --                model.autoState
 --                (acceptablePokemon model.query pokemons)
 --        ]
+
+
+updatePokeSelectionQuery : String -> String -> Model -> Model
+updatePokeSelectionQuery id newQuery current =
+    let
+        newAutocompletes =
+            List.map
+                (\selection ->
+                    if selection.id == id then
+                        { selection | query = newQuery }
+
+                    else
+                        selection
+                )
+                current.selections
+    in
+    { current | selections = newAutocompletes }
+
+
+pokemonInputBox : List RefValue -> Autocomplete -> Html Msg
+pokemonInputBox pokemonList autocomplete =
+    div []
+        [ img [ src "./media/pokemon/icons/0.png" ] []
+        , input
+            [ onInput (setQueryById autocomplete.id)
+            , Attrs.class "autocomplete-input"
+            , Attrs.value autocomplete.query
+            , id ("pookers" ++ autocomplete.id)
+            ]
+            []
+        ]
+
+
+pokemonSelect : List Autocomplete -> List RefValue -> Maybe Pokemon -> Html Msg
+pokemonSelect models pokeList maybeMon =
+    div []
+        (List.map
+            (\model ->
+                pokemonInputBox pokeList model
+             --div
+             --[]
+             --[ img [ src "./media/pokemon/icons/0.png" ] []
+             --, input
+             --    [ --onInput SetQuery
+             --      Attrs.class "autocomplete-input"
+             --    , Attrs.value model.query
+             --    , id ("pookers" ++ model.id)
+             --    ]
+             --    []
+             --]
+             --, if model.showMenu then
+             --    viewMenu model pokeList
+             --
+             --  else
+             --    Html.div [] []
+             --, displayMon maybeMon
+            )
+            models
+        )
+
+
+setQueryById : String -> (String -> Msg)
+setQueryById id =
+    SetQuery id
