@@ -83,6 +83,8 @@ type Msg
     | GotPokeList (Result Http.Error PokeList)
     | GotPokemon (Result Http.Error Pokemon)
     | SetQuery String String
+    | SetAutoCompleteState (Maybe Menu.State)
+    | SelectPokemon String
 
 
 
@@ -111,24 +113,24 @@ buildErrorMessage httpError =
 
 
 
---updateConfig : Menu.UpdateConfig Msg RefValue
---updateConfig =
---    Menu.updateConfig
---        { toId = .name
---        , onKeyDown =
---            \code maybeId ->
---                if code == 13 then
---                    Maybe.map SelectPokemon maybeId
---
---                else
---                    Nothing
---        , onTooLow = Nothing
---        , onTooHigh = Nothing
---        , onMouseEnter = \_ -> Nothing
---        , onMouseLeave = \_ -> Nothing
---        , onMouseClick = \id -> Just <| SelectPokemon id
---        , separateSelections = False
---        }
+updateConfig : Menu.UpdateConfig Msg RefValue
+updateConfig =
+   Menu.updateConfig
+       { toId = .name
+       , onKeyDown =
+           \code maybeId ->
+               if code == 13 then
+                   Maybe.map SelectPokemon maybeId
+
+               else
+                   Nothing
+       , onTooLow = Nothing
+       , onTooHigh = Nothing
+       , onMouseEnter = \_ -> Nothing
+       , onMouseLeave = \_ -> Nothing
+       , onMouseClick = \id -> Just <| SelectPokemon id
+       , separateSelections = False
+       }
 
 
 acceptablePokemon : String -> List RefValue -> List RefValue
@@ -179,24 +181,24 @@ update msg model =
 
 
 
---SetAutoCompleteState autoMsg ->
---    let
---        ( newState, maybeMsg ) =
---            Menu.update updateConfig
---                autoMsg
---                model.howManyToShow
---                model.autocomplete.autoState
---                (acceptablePokemon model.autocomplete.query model.pokemonList)
---
---        autocomplete =
---            model.autocomplete
---
---        newModel =
---            { model | autocomplete = { autocomplete | autoState = newState } }
---    in
---    maybeMsg
---        |> Maybe.map (\updateMsg -> update updateMsg newModel)
---        |> Maybe.withDefault ( newModel, Cmd.none )
+        SetAutoCompleteState autoMsg pokeId ->
+            let 
+                ( newState, maybeMsg ) =
+                    Menu.update updateConfig
+                        autoMsg
+                        model.howManyToShow
+                        model.autocomplete.autoState
+                        (acceptablePokemon model.autocomplete.query model.pokemonList)
+
+                autocomplete =
+                    model.autocomplete
+
+                newModel =
+                    { model | autocomplete = { autocomplete | autoState = newState } }
+            in
+            maybeMsg
+               |> Maybe.map (\updateMsg -> update updateMsg newModel)
+               |> Maybe.withDefault ( newModel, Cmd.none )
 --SetQuery newQuery ->
 --    let
 --        autocomplete =
@@ -313,15 +315,15 @@ viewConfig =
 
 
 
---viewMenu : Autocomplete -> List RefValue -> Html.Html Msg
---viewMenu model pokemons =
---    Html.div [ Attrs.class "autocomplete-menu" ]
---        [ Html.map SetAutoCompleteState <|
---            Menu.view viewConfig
---                model.howManyToShow
---                model.autoState
---                (acceptablePokemon model.query pokemons)
---        ]
+viewMenu : PokemonSelectConfig r -> Autocomplete -> List RefValue -> Html.Html Msg
+viewMenu config model pokemons =
+   div [ Attrs.class "autocomplete-menu" ]
+       [ Html.map SetAutoCompleteState <|
+            Menu.view viewConfig
+                config.howManyToShow
+                model.autoState
+                (acceptablePokemon model.query pokemons)
+       ]
 
 
 updatePokeSelectionQuery : String -> String -> Model -> Model
@@ -352,6 +354,10 @@ pokemonInputBox pokemonList autocomplete =
             , id ("pookers" ++ autocomplete.id)
             ]
             []
+             , if autocomplete.autoState then
+                viewMenu autocomplete pokemonList
+              else
+                Html.div [] []
         ]
 
 
