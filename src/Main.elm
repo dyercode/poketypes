@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Decoders exposing (pokeListDecoder, pokemonDecoder)
-import Html exposing (Html, button, div, li, p, text, ul, img, input)
+import Html exposing (Html, button, div, img, input, li, p, text, ul)
 import Html.Attributes as Attrs exposing (id, src)
 import Html.Events exposing (onClick, onInput)
 import Http
@@ -45,16 +45,21 @@ main =
         }
 
 
-
 defaultPokeSelectAuto : Autocomplete
 defaultPokeSelectAuto =
     { autoState = Menu.empty
     , query = ""
     , id = ""
     }
+
+
 initPokeSelectAuto : List Autocomplete
 initPokeSelectAuto =
-    List.indexedMap (\thing1 thing2 -> { thing2 | id = String.fromInt thing1 }) (List.repeat 6 defaultPokeSelectAuto)
+    List.indexedMap
+        (\index select ->
+            { select | id = String.fromInt index }
+        )
+        (List.repeat 6 defaultPokeSelectAuto)
 
 
 init : () -> ( Model, Cmd Msg )
@@ -69,7 +74,7 @@ init _ =
       , dropDownOpen = Nothing
       , howManyToShow = 5
       }
-    , Cmd.none
+    , getPokemons (pokeApiBase ++ pokeApiSpecies)
     )
 
 
@@ -233,8 +238,6 @@ view : Model -> Html Msg
 view model =
     div []
         [ pokemonSelect model.selections [] Nothing
-        , button [ onClick (GetPokemonList (pokeApiBase ++ pokeApiSpecies)) ]
-            [ text "get em all" ]
         , if List.isEmpty model.pokemonList then
             p [] [ text "ain't got none" ]
 
@@ -358,17 +361,8 @@ pokemonSelect models pokeList maybeMon =
         (List.map
             (\model ->
                 pokemonInputBox pokeList model
-             --div
-             --[]
-             --[ img [ src "./media/pokemon/icons/0.png" ] []
-             --, input
-             --    [ --onInput SetQuery
-             --      Attrs.class "autocomplete-input"
-             --    , Attrs.value model.query
-             --    , id ("pookers" ++ model.id)
-             --    ]
-             --    []
-             --]
+            --  div
+            --  []
              --, if model.showMenu then
              --    viewMenu model pokeList
              --
