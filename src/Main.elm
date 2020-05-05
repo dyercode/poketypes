@@ -2,9 +2,9 @@ module Main exposing (main)
 
 import Browser
 import Decoders exposing (pokeListDecoder, pokemonDecoder)
-import Html exposing (Html, button, div, img, input, li, p, text, ul)
+import Html exposing (Html, div, img, input, li, p, text, ul)
 import Html.Attributes as Attrs exposing (id, src)
-import Html.Events exposing (onClick, onInput)
+import Html.Events exposing (onInput)
 import Http
 import Menu
 import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
@@ -66,8 +66,6 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     ( { pokedex = Nothing
       , errorMessage = Nothing
-
-      --   , autocomplete = initPokeSelectAuto
       , pokemonList = []
       , selections = initPokeSelectAuto
       , selectedMon = Nothing
@@ -82,15 +80,10 @@ type Msg
     = GetPokemonList String
     | GotPokeList (Result Http.Error PokeList)
     | GotPokemon (Result Http.Error Pokemon)
+      --         pokeId query
     | SetQuery String String
     | SetAutoCompleteState String Menu.Msg
     | SelectPokemon String
-
-
-
---| SetAutoCompleteState Menu.Msg
---| SetQuery String
---| SelectPokemon String
 
 
 buildErrorMessage : Http.Error -> String
@@ -195,7 +188,7 @@ update msg model =
                     ( model, Cmd.none )
 
         SelectPokemon string ->
-            ( model, Cmd.none )
+            ( { model | dropDownOpen = Nothing }, Cmd.none )
 
 
 updateStateById : Model -> Menu.State -> String -> Model
@@ -230,16 +223,6 @@ updateConfigById pokeId autoMsg model =
 
 
 
---else
---    ???
---SetQuery newQuery ->
---    let
---        autocomplete =
---            model.autocomplete
---    in
---    ( { model | autocomplete = { autocomplete | query = newQuery, showMenu = True } }
---    , Cmd.none
---    )
 --SelectPokemon id ->
 --    let
 --        newMonMaybe =
@@ -367,12 +350,12 @@ viewMenu config model pokemons =
 
 
 updatePokeSelectionQuery : String -> String -> Model -> Model
-updatePokeSelectionQuery id newQuery current =
+updatePokeSelectionQuery pokeId newQuery current =
     let
         newAutocompletes =
             List.map
                 (\selection ->
-                    if selection.id == id then
+                    if selection.id == pokeId then
                         { selection | query = newQuery }
 
                     else
@@ -380,7 +363,7 @@ updatePokeSelectionQuery id newQuery current =
                 )
                 current.selections
     in
-    { current | selections = newAutocompletes }
+    { current | selections = newAutocompletes, dropDownOpen = Just pokeId }
 
 
 isOpen : Autocomplete -> Maybe String -> Bool
@@ -401,36 +384,30 @@ pokemonInputBox pokemonList config currentOpen autocomplete =
             [ onInput (setQueryById autocomplete.id)
             , Attrs.class "autocomplete-input"
             , Attrs.value autocomplete.query
-            , id ("pookers" ++ autocomplete.id)
+            , id ("poke-select-" ++ autocomplete.id)
             ]
             []
         , if isOpen autocomplete currentOpen then
             viewMenu config autocomplete pokemonList
 
           else
-            Html.div [] []
+            Html.div [] [ text (autocomplete.id ++ "was not open but [" ++ Maybe.withDefault "nothing" currentOpen ++ "] was") ]
         ]
-
-
-
--- this is fat enough, might just want model. Definitely need to standardize the order a bit more either way.
 
 
 pokemonSelect : Model -> Maybe Pokemon -> Html Msg
 pokemonSelect model maybeMon =
     div []
         (List.map
-            (\autocomplete ->
-                pokemonInputBox model.pokemonList model model.dropDownOpen autocomplete
-             --  div
-             --  []
-             --, if model.showMenu then
-             --    viewMenu model pokeList
-             --
-             --  else
-             --    Html.div [] []
-             --, displayMon maybeMon
+            (\selection ->
+                div []
+                    [ pokemonInputBox model.pokemonList
+                        model
+                        model.dropDownOpen
+                        selection
+                    ]
             )
+            --, displayMon maybeMon
             model.selections
         )
 
