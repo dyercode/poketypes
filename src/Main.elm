@@ -80,7 +80,6 @@ type Msg
     = GetPokemonList String
     | GotPokeList (Result Http.Error PokeList)
     | GotPokemon (Result Http.Error Pokemon)
-      --         pokeId query
     | SetQuery String String
     | SetAutoCompleteState String Menu.Msg
     | SelectPokemon String
@@ -391,7 +390,7 @@ pokemonInputBox pokemonList config currentOpen autocomplete =
             viewMenu config autocomplete pokemonList
 
           else
-            Html.div [] [ text (autocomplete.id ++ "was not open but [" ++ Maybe.withDefault "nothing" currentOpen ++ "] was") ]
+            Html.div [] []
         ]
 
 
