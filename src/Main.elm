@@ -83,7 +83,7 @@ type Msg
     | GotPokeList (Result Http.Error PokeList)
     | GotPokemon (Result Http.Error Pokemon)
     | SetQuery String String
-    | SetAutoCompleteState (Maybe Menu.State)
+    | SetAutoCompleteState String Menu.Msg
     | SelectPokemon String
 
 
@@ -112,25 +112,24 @@ buildErrorMessage httpError =
             message
 
 
-
 updateConfig : Menu.UpdateConfig Msg RefValue
 updateConfig =
-   Menu.updateConfig
-       { toId = .name
-       , onKeyDown =
-           \code maybeId ->
-               if code == 13 then
-                   Maybe.map SelectPokemon maybeId
+    Menu.updateConfig
+        { toId = .name
+        , onKeyDown =
+            \code maybeId ->
+                if code == 13 then
+                    Maybe.map SelectPokemon maybeId
 
-               else
-                   Nothing
-       , onTooLow = Nothing
-       , onTooHigh = Nothing
-       , onMouseEnter = \_ -> Nothing
-       , onMouseLeave = \_ -> Nothing
-       , onMouseClick = \id -> Just <| SelectPokemon id
-       , separateSelections = False
-       }
+                else
+                    Nothing
+        , onTooLow = Nothing
+        , onTooHigh = Nothing
+        , onMouseEnter = \_ -> Nothing
+        , onMouseLeave = \_ -> Nothing
+        , onMouseClick = \id -> Just <| SelectPokemon id
+        , separateSelections = False
+        }
 
 
 acceptablePokemon : String -> List RefValue -> List RefValue
@@ -179,26 +178,60 @@ update msg model =
         SetQuery id text ->
             ( updatePokeSelectionQuery id text model, Cmd.none )
 
-
-
-        SetAutoCompleteState autoMsg pokeId ->
-            let 
-                ( newState, maybeMsg ) =
-                    Menu.update updateConfig
-                        autoMsg
-                        model.howManyToShow
-                        model.autocomplete.autoState
-                        (acceptablePokemon model.autocomplete.query model.pokemonList)
-
-                autocomplete =
-                    model.autocomplete
-
-                newModel =
-                    { model | autocomplete = { autocomplete | autoState = newState } }
+        SetAutoCompleteState pokeId autoMsg ->
+            let
+                updatedConfig : Maybe ( Menu.State, Maybe Msg )
+                updatedConfig =
+                    updateConfigById pokeId autoMsg model
             in
-            maybeMsg
-               |> Maybe.map (\updateMsg -> update updateMsg newModel)
-               |> Maybe.withDefault ( newModel, Cmd.none )
+            case updatedConfig of
+                Just ( _, Nothing ) ->
+                    ( model, Cmd.none )
+
+                Just ( newState, Just justMsg ) ->
+                    update justMsg (updateStateById model newState pokeId)
+
+                Nothing ->
+                    ( model, Cmd.none )
+
+        SelectPokemon string ->
+            ( model, Cmd.none )
+
+
+updateStateById : Model -> Menu.State -> String -> Model
+updateStateById model newState id =
+    let
+        updatedSelections =
+            List.map
+                (\selection ->
+                    if selection.id == id then
+                        { selection | autoState = newState }
+
+                    else
+                        selection
+                )
+                model.selections
+    in
+    { model | selections = updatedSelections }
+
+
+updateConfigById : String -> Menu.Msg -> Model -> Maybe ( Menu.State, Maybe Msg )
+updateConfigById pokeId autoMsg model =
+    List.filter (\selection -> selection.id == pokeId) model.selections
+        |> List.head
+        |> Maybe.map
+            (\selection ->
+                Menu.update updateConfig
+                    autoMsg
+                    model.howManyToShow
+                    selection.autoState
+                    (acceptablePokemon selection.query model.pokemonList)
+            )
+
+
+
+--else
+--    ???
 --SetQuery newQuery ->
 --    let
 --        autocomplete =
@@ -239,7 +272,7 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ pokemonSelect model.selections [] Nothing
+        [ pokemonSelect model Nothing
         , if List.isEmpty model.pokemonList then
             p [] [ text "ain't got none" ]
 
@@ -314,16 +347,23 @@ viewConfig =
         }
 
 
+thingy : String -> (Menu.Msg -> Msg)
+thingy id =
+    SetAutoCompleteState id
 
-viewMenu : PokemonSelectConfig r -> Autocomplete -> List RefValue -> Html.Html Msg
+
+viewMenu : PokemonSelectConfig r -> Autocomplete -> List RefValue -> Html Msg
 viewMenu config model pokemons =
-   div [ Attrs.class "autocomplete-menu" ]
-       [ Html.map SetAutoCompleteState <|
-            Menu.view viewConfig
+    div [ Attrs.class "autocomplete-menu" ]
+        [ Html.map
+            (thingy model.id)
+            (Menu.view
+                viewConfig
                 config.howManyToShow
                 model.autoState
                 (acceptablePokemon model.query pokemons)
-       ]
+            )
+        ]
 
 
 updatePokeSelectionQuery : String -> String -> Model -> Model
@@ -343,8 +383,18 @@ updatePokeSelectionQuery id newQuery current =
     { current | selections = newAutocompletes }
 
 
-pokemonInputBox : List RefValue -> Autocomplete -> Html Msg
-pokemonInputBox pokemonList autocomplete =
+isOpen : Autocomplete -> Maybe String -> Bool
+isOpen me current =
+    case current of
+        Just s ->
+            me.id == s
+
+        Nothing ->
+            False
+
+
+pokemonInputBox : List RefValue -> PokemonSelectConfig r -> Maybe String -> Autocomplete -> Html Msg
+pokemonInputBox pokemonList config currentOpen autocomplete =
     div []
         [ img [ src "./media/pokemon/icons/0.png" ] []
         , input
@@ -354,21 +404,26 @@ pokemonInputBox pokemonList autocomplete =
             , id ("pookers" ++ autocomplete.id)
             ]
             []
-             , if autocomplete.autoState then
-                viewMenu autocomplete pokemonList
-              else
-                Html.div [] []
+        , if isOpen autocomplete currentOpen then
+            viewMenu config autocomplete pokemonList
+
+          else
+            Html.div [] []
         ]
 
 
-pokemonSelect : List Autocomplete -> List RefValue -> Maybe Pokemon -> Html Msg
-pokemonSelect models pokeList maybeMon =
+
+-- this is fat enough, might just want model. Definitely need to standardize the order a bit more either way.
+
+
+pokemonSelect : Model -> Maybe Pokemon -> Html Msg
+pokemonSelect model maybeMon =
     div []
         (List.map
-            (\model ->
-                pokemonInputBox pokeList model
-            --  div
-            --  []
+            (\autocomplete ->
+                pokemonInputBox model.pokemonList model model.dropDownOpen autocomplete
+             --  div
+             --  []
              --, if model.showMenu then
              --    viewMenu model pokeList
              --
@@ -376,10 +431,10 @@ pokemonSelect models pokeList maybeMon =
              --    Html.div [] []
              --, displayMon maybeMon
             )
-            models
+            model.selections
         )
 
 
 setQueryById : String -> (String -> Msg)
-setQueryById id =
-    SetQuery id
+setQueryById pokeId =
+    SetQuery pokeId
