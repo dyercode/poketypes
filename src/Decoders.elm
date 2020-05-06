@@ -34,3 +34,7 @@ listRefValDecoder key =
     map2 RefValue
         (at [ key, "name" ] string)
         (at [ key, "url" ] string)
+
+damageRelations
+
+    

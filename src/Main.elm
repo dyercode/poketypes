@@ -7,8 +7,9 @@ import Html.Attributes as Attrs exposing (id, src)
 import Html.Events exposing (onInput)
 import Http
 import Menu
+import Client exposing (baseUrl, speciesEndpoint, pokemonEndpoint)
 import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
-
+import Table exposing (Types)
 
 type alias PokemonSelectConfig r =
     { r
@@ -72,7 +73,7 @@ init _ =
       , dropDownOpen = Nothing
       , howManyToShow = 5
       }
-    , getPokemons (pokeApiBase ++ pokeApiSpecies)
+    , getPokemons (Client.baseUrl ++ Client.speciesEndpoint)
     )
 
 
@@ -255,28 +256,15 @@ view : Model -> Html Msg
 view model =
     div []
         [ pokemonSelect model Nothing
-        , if List.isEmpty model.pokemonList then
-            p [] [ text "ain't got none" ]
-
-          else
-            ul []
-                (List.map (\n -> li [] [ text n.name ]) model.pokemonList)
+        , Table.printTable ["Normal", "Dark", "Fairy"]
+        -- , if List.isEmpty model.pokemonList then
+            -- p [] [ text "ain't got none" ]
+-- 
+        --   else
+            -- ul []
+                -- (List.map (\n -> li [] [ text n.name ]) model.pokemonList)
         ]
 
-
-pokeApiBase : String
-pokeApiBase =
-    "https://pokeapi.co"
-
-
-pokeApiSpecies : String
-pokeApiSpecies =
-    "/api/v2/pokemon-species/?limit=100"
-
-
-pokeApiPokemon : String
-pokeApiPokemon =
-    "/api/v2/pokemon/"
 
 
 getPokemons : String -> Cmd Msg
@@ -290,7 +278,7 @@ getPokemons url =
 getPokemon : String -> Cmd Msg
 getPokemon name =
     Http.get
-        { url = pokeApiBase ++ pokeApiPokemon ++ name
+        { url = Client.baseUrl ++ Client.pokemonEndpoint ++ name
         , expect = Http.expectJson GotPokemon pokemonDecoder
         }
 
