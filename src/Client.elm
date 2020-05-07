@@ -1,8 +1,10 @@
-module Client exposing (baseUrl, speciesEndpoint, pokemonEndpoint, typeEndpoint)
+module Client exposing (baseUrl, pokemonEndpoint, speciesEndpoint, typeEndpoint)
+
 
 baseUrl : String
-baseUrl  =
+baseUrl =
     "https://pokeapi.co"
+
 
 speciesEndpoint : String
 speciesEndpoint =
@@ -13,5 +15,7 @@ pokemonEndpoint : String
 pokemonEndpoint =
     "/api/v2/pokemon/"
 
+
 typeEndpoint : String
-typeEndpoint = "/type/"
+typeEndpoint =
+    "/type/"

@@ -1,15 +1,16 @@
 module Main exposing (main)
 
 import Browser
+import Client
 import Decoders exposing (pokeListDecoder, pokemonDecoder)
 import Html exposing (Html, div, img, input, li, p, text, ul)
 import Html.Attributes as Attrs exposing (id, src)
 import Html.Events exposing (onInput)
 import Http
 import Menu
-import Client exposing (baseUrl, speciesEndpoint, pokemonEndpoint)
-import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
-import Table exposing (Types)
+import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue, Type)
+import Table
+
 
 type alias PokemonSelectConfig r =
     { r
@@ -27,8 +28,10 @@ type alias Autocomplete =
 
 type alias Model =
     { pokedex : Maybe PokeList
+    , typedex : Maybe (List Type)
     , errorMessage : Maybe String
     , pokemonList : List RefValue
+    , pokemonListReal : List Pokemon
     , selectedMon : Maybe Pokemon
     , dropDownOpen : Maybe String
     , howManyToShow : Int
@@ -66,8 +69,47 @@ initPokeSelectAuto =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { pokedex = Nothing
+      , typedex =
+            Just
+                [ { name = "Dark"
+                  , damageRelations =
+                        { doubleDamageFrom = []
+                        , doubleDamageTo = []
+                        , halfDamageFrom = []
+                        , halfDamageTo = []
+                        , noDamageFrom = [ { name = "Psychic", url = "" } ]
+                        , noDamageTo = []
+                        }
+                  }
+                , { name = "Psychic"
+                  , damageRelations =
+                        { doubleDamageFrom = [ { name = "Dark", url = "" } ]
+                        , doubleDamageTo = []
+                        , halfDamageFrom = [ { name = "Psychic", url = "" } ]
+                        , halfDamageTo = []
+                        , noDamageFrom = []
+                        , noDamageTo = []
+                        }
+                  }
+                , { name = "Ghost"
+                  , damageRelations =
+                        { doubleDamageFrom = [ { name = "Dark", url = "" } ]
+                        , doubleDamageTo = []
+                        , halfDamageFrom = []
+                        , halfDamageTo = []
+                        , noDamageFrom = []
+                        , noDamageTo = []
+                        }
+                  }
+                ]
       , errorMessage = Nothing
       , pokemonList = []
+      , pokemonListReal =
+            [ { name = "Lunala"
+              , order = 0 -- wtf is this field?
+              , types = [ "Ghost", "Psychic" ]
+              }
+            ]
       , selections = initPokeSelectAuto
       , selectedMon = Nothing
       , dropDownOpen = Nothing
@@ -256,15 +298,29 @@ view : Model -> Html Msg
 view model =
     div []
         [ pokemonSelect model Nothing
-        , Table.printTable ["Normal", "Dark", "Fairy"]
-        -- , if List.isEmpty model.pokemonList then
-            -- p [] [ text "ain't got none" ]
--- 
-        --   else
-            -- ul []
-                -- (List.map (\n -> li [] [ text n.name ]) model.pokemonList)
-        ]
+        , Table.printTable model.pokemonListReal
+            (model.typedex
+                |> Maybe.withDefault
+                    [ { name = "Dark"
+                      , damageRelations =
+                            { noDamageFrom = []
+                            , halfDamageFrom = []
+                            , doubleDamageFrom = []
+                            , noDamageTo = []
+                            , halfDamageTo = []
+                            , doubleDamageTo = []
+                            }
+                      }
+                    ]
+            )
 
+        -- , if List.isEmpty model.pokemonList then
+        -- p [] [ text "ain't got none" ]
+        --
+        --   else
+        -- ul []
+        -- (List.map (\n -> li [] [ text n.name ]) model.pokemonList)
+        ]
 
 
 getPokemons : String -> Cmd Msg
@@ -289,7 +345,7 @@ displayMon pkmn =
         Just mon ->
             div []
                 [ p [] [ text ("(#" ++ String.fromInt mon.order ++ ") " ++ mon.name) ]
-                , ul [] (List.map (\t -> li [] [ text t.name ]) mon.types)
+                , ul [] (List.map (\t -> li [] [ text t ]) mon.types)
                 ]
 
         Nothing ->

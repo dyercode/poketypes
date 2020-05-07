@@ -1,7 +1,7 @@
-module Decoders exposing (listRefValDecoder, pokeListDecoder, pokemonDecoder, refValDecoder)
+module Decoders exposing (listRefValDecoder, pokeListDecoder, pokemonApiDecoder, pokemonDecoder, refValDecoder)
 
-import Json.Decode exposing (Decoder, at, field, int, list, map2, map3, map5, maybe, string)
-import PokeApiDataTypes exposing (PokeList, Pokemon, RefValue)
+import Json.Decode exposing (Decoder, at, field, int, list, map2, map3, map5, map6, maybe, string)
+import PokeApiDataTypes exposing (DamageRelations, PokeList, Pokemon, RefValue, Type)
 
 
 pokeListDecoder : Decoder PokeList
@@ -12,14 +12,36 @@ pokeListDecoder =
         (field "results" (list refValDecoder))
 
 
-pokemonDecoder : Decoder Pokemon
-pokemonDecoder =
-    map5 Pokemon
+type alias PokemonApi =
+    { name : String
+    , order : Int -- Dex number?
+    , abilities : List RefValue
+    , types : List RefValue
+    , moves : List RefValue
+    }
+
+
+pokemonApiDecoder : Decoder PokemonApi
+pokemonApiDecoder =
+    map5 PokemonApi
         (field "name" string)
         (field "order" int)
         (field "abilities" (list (listRefValDecoder "ability")))
         (field "types" (list (listRefValDecoder "type")))
         (field "moves" (list (listRefValDecoder "move")))
+
+
+getName : RefValue -> String
+getName rv =
+    rv.name
+
+
+pokemonDecoder : Decoder Pokemon
+pokemonDecoder =
+    map3 Pokemon
+        (field "name" string)
+        (field "order" int)
+        (field "types" (list (Json.Decode.map getName (listRefValDecoder "type"))))
 
 
 refValDecoder : Decoder RefValue
@@ -35,6 +57,20 @@ listRefValDecoder key =
         (at [ key, "name" ] string)
         (at [ key, "url" ] string)
 
-damageRelations
 
-    
+damageRelations : Decoder DamageRelations
+damageRelations =
+    map6 DamageRelations
+        (field "double_damage_from" (list refValDecoder))
+        (field "double_damage_to" (list refValDecoder))
+        (field "half_damage_from" (list refValDecoder))
+        (field "half_damage_to" (list refValDecoder))
+        (field "no_damage_from" (list refValDecoder))
+        (field "no_damage_to" (list refValDecoder))
+
+
+pokeType : Decoder Type
+pokeType =
+    map2 Type
+        (field "name" string)
+        (field "damage_relations" damageRelations)
