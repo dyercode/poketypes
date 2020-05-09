@@ -3,17 +3,17 @@ module Client exposing (baseUrl, pokemonEndpoint, speciesEndpoint, typeEndpoint)
 
 baseUrl : String
 baseUrl =
-    "https://pokeapi.co"
+    "https://pokeapi.co/api/v2"
 
 
 speciesEndpoint : String
 speciesEndpoint =
-    "/api/v2/pokemon-species/?limit=100"
+    "/pokemon-species/?limit=100"
 
 
 pokemonEndpoint : String
 pokemonEndpoint =
-    "/api/v2/pokemon/"
+    "/pokemon/"
 
 
 typeEndpoint : String
