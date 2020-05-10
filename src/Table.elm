@@ -1,17 +1,9 @@
 module Table exposing (Effectiveness(..), printTable, typeDamageMultiplier)
 
-import Client
-import Decoders exposing (pokeListDecoder)
 import Html exposing (Html, text)
-import Http
 import List.Extra
 import Maybe.Extra
 import PokeApiDataTypes exposing (DamageRelations, PokeList, Pokemon, Type)
-
-
-type TableMsg
-    = GotTypes (Result Http.Error PokeList)
-    | GotType (Result Http.Error Type)
 
 
 type Effectiveness
@@ -21,14 +13,6 @@ type Effectiveness
     | Neutral
     | Double
     | Quadrouple
-
-
-getTypes : Cmd TableMsg
-getTypes =
-    Http.get
-        { url = Client.baseUrl ++ Client.typeEndpoint
-        , expect = Http.expectJson GotTypes pokeListDecoder
-        }
 
 
 damageRelationMultiple : String -> DamageRelations -> Effectiveness

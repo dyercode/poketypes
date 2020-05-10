@@ -1,4 +1,4 @@
-module Decoders exposing (listRefValDecoder, pokeListDecoder, pokemonApiDecoder, pokemonDecoder, refValDecoder)
+module Decoders exposing (listRefValDecoder, pokeListDecoder, pokeTypeDecoder, pokemonApiDecoder, pokemonDecoder, refValDecoder)
 
 import Json.Decode exposing (Decoder, at, field, int, list, map2, map3, map5, map6, maybe, string)
 import PokeApiDataTypes exposing (DamageRelations, PokeList, Pokemon, RefValue, Type)
@@ -69,8 +69,8 @@ damageRelations =
         (field "no_damage_to" (list refValDecoder))
 
 
-pokeType : Decoder Type
-pokeType =
+pokeTypeDecoder : Decoder Type
+pokeTypeDecoder =
     map2 Type
         (field "name" string)
         (field "damage_relations" damageRelations)

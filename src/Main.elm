@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Client
-import Decoders exposing (pokeListDecoder, pokemonDecoder)
+import Decoders exposing (pokeListDecoder, pokeTypeDecoder, pokemonDecoder)
 import Html exposing (Html, div, img, input, li, p, text, ul)
 import Html.Attributes as Attrs exposing (id, src)
 import Html.Events exposing (onInput)
@@ -28,7 +28,7 @@ type alias Autocomplete =
 
 type alias Model =
     { pokedex : Maybe PokeList
-    , typedex : Maybe (List Type)
+    , typedex : List Type
     , errorMessage : Maybe String
     , pokemonList : List RefValue
     , pokemonListReal : List Pokemon
@@ -69,45 +69,13 @@ initPokeSelectAuto =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { pokedex = Nothing
-      , typedex =
-            Just
-                [ { name = "Dark"
-                  , damageRelations =
-                        { doubleDamageFrom = []
-                        , doubleDamageTo = []
-                        , halfDamageFrom = []
-                        , halfDamageTo = []
-                        , noDamageFrom = [ { name = "Psychic", url = "" } ]
-                        , noDamageTo = []
-                        }
-                  }
-                , { name = "Psychic"
-                  , damageRelations =
-                        { doubleDamageFrom = [ { name = "Dark", url = "" } ]
-                        , doubleDamageTo = []
-                        , halfDamageFrom = [ { name = "Psychic", url = "" } ]
-                        , halfDamageTo = []
-                        , noDamageFrom = []
-                        , noDamageTo = []
-                        }
-                  }
-                , { name = "Ghost"
-                  , damageRelations =
-                        { doubleDamageFrom = [ { name = "Dark", url = "" } ]
-                        , doubleDamageTo = []
-                        , halfDamageFrom = []
-                        , halfDamageTo = []
-                        , noDamageFrom = []
-                        , noDamageTo = []
-                        }
-                  }
-                ]
+      , typedex = []
       , errorMessage = Nothing
       , pokemonList = []
       , pokemonListReal =
             [ { name = "Lunala"
               , order = 0 -- wtf is this field?
-              , types = [ "Ghost", "Psychic" ]
+              , types = [ "ghost", "psychic" ]
               }
             ]
       , selections = initPokeSelectAuto
@@ -115,7 +83,10 @@ init _ =
       , dropDownOpen = Nothing
       , howManyToShow = 5
       }
-    , getPokemons (Client.baseUrl ++ Client.speciesEndpoint)
+    , Cmd.batch
+        [ getPokemons (Client.baseUrl ++ Client.speciesEndpoint)
+        , getTypes
+        ]
     )
 
 
@@ -126,6 +97,8 @@ type Msg
     | SetQuery String String
     | SetAutoCompleteState String Menu.Msg
     | SelectPokemon String
+    | GotTypes (Result Http.Error PokeList)
+    | GotType (Result Http.Error Type)
 
 
 buildErrorMessage : Http.Error -> String
@@ -229,8 +202,20 @@ update msg model =
                 Nothing ->
                     ( model, Cmd.none )
 
-        SelectPokemon string ->
+        SelectPokemon pokeName ->
             ( { model | dropDownOpen = Nothing }, Cmd.none )
+
+        GotTypes (Ok types) ->
+            ( model, Cmd.batch (List.map (\rv -> getType rv.url) types.results) )
+
+        GotTypes (Err errMessage) ->
+            ( { model | errorMessage = Just (buildErrorMessage errMessage) }, Cmd.none )
+
+        GotType (Ok pokeType) ->
+            ( { model | typedex = pokeType :: model.typedex }, Cmd.none )
+
+        GotType (Err errMessage) ->
+            ( { model | errorMessage = Just (buildErrorMessage errMessage) }, Cmd.none )
 
 
 updateStateById : Model -> Menu.State -> String -> Model
@@ -300,18 +285,18 @@ view model =
         [ pokemonSelect model Nothing
         , Table.printTable model.pokemonListReal
             (model.typedex
-                |> Maybe.withDefault
-                    [ { name = "Dark"
-                      , damageRelations =
-                            { noDamageFrom = []
-                            , halfDamageFrom = []
-                            , doubleDamageFrom = []
-                            , noDamageTo = []
-                            , halfDamageTo = []
-                            , doubleDamageTo = []
-                            }
-                      }
-                    ]
+             --|> Maybe.withDefault
+             --    [ { name = "Dark"
+             --      , damageRelations =
+             --            { noDamageFrom = []
+             --            , halfDamageFrom = []
+             --            , doubleDamageFrom = []
+             --            , noDamageTo = []
+             --            , halfDamageTo = []
+             --            , doubleDamageTo = []
+             --            }
+             --      }
+             --    ]
             )
 
         -- , if List.isEmpty model.pokemonList then
@@ -336,6 +321,22 @@ getPokemon name =
     Http.get
         { url = Client.baseUrl ++ Client.pokemonEndpoint ++ name
         , expect = Http.expectJson GotPokemon pokemonDecoder
+        }
+
+
+getTypes : Cmd Msg
+getTypes =
+    Http.get
+        { url = Client.baseUrl ++ Client.typeEndpoint
+        , expect = Http.expectJson GotTypes pokeListDecoder
+        }
+
+
+getType : String -> Cmd Msg
+getType url =
+    Http.get
+        { url = url
+        , expect = Http.expectJson GotType pokeTypeDecoder
         }
 
 
