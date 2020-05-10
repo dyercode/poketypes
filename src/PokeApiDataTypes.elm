@@ -4,7 +4,7 @@ module PokeApiDataTypes exposing (DamageRelation, DamageRelations, PokeList, Pok
 type alias PokeList =
     { count : Int
     , next : Maybe String
-    , results : List RefValue
+    , results : List String
     }
 
 

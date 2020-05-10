@@ -9,7 +9,7 @@ pokeListDecoder =
     map3 PokeList
         (field "count" int)
         (maybe (field "next" string))
-        (field "results" (list refValDecoder))
+        (field "results" (list (Json.Decode.map getName refValDecoder)))
 
 
 type alias PokemonApi =
