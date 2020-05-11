@@ -16,18 +16,11 @@ class RefValue {
     url: string;
 }
 
-class PokemonApi {
-    name: string;
-    types: RefValue[]
-}
-
 class ListApi {
     name: string;
     next?: string;
     results: RefValue[];
 }
-
-class Type {}
 
 export function getPokedex (dex: string[], url: string = pokemonListStartUrl): Promise<string[]>  {
     const initResult: Promise<AxiosResponse<ListApi>> = axios.get(url);
