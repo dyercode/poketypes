@@ -8,10 +8,13 @@
     "build": "parcel build src/index.html"
   },
   "devDependencies": {
-    "elm-analyse": "^0.16.5",
-    "elm-format": "^0.8.3",
-    "elm-hot": "^1.1.4",
-    "node-elm-compiler": "^5.0.4",
-    "parcel-bundler": "^1.12.4"
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-svelte": "^4.0.6",
+    "svelte": "^3.22.2",
+    "svelte-preprocess": "^3.7.4",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
   }
 }
