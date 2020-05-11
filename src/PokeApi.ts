@@ -22,6 +22,13 @@ class ListApi {
     results: RefValue[];
 }
 
+class Type {
+    name: string;
+    noDamageFrom: string[]
+    halfDamageFrom: string[]
+    doubleDamageFrom: string[]
+}
+
 export function getPokedex (dex: string[], url: string = pokemonListStartUrl): Promise<string[]>  {
     const initResult: Promise<AxiosResponse<ListApi>> = axios.get(url);
     return initResult.then((soFar: AxiosResponse<ListApi> ) => {
