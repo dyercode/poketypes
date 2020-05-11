@@ -1,16 +1,24 @@
 <script lang="typescript">
     import { almostPokedex } from '../initialize';
+    import Member from './Member.svelte';
     export let name;
     let pokedex= [];
     almostPokedex.then((dex) => {console.log(dex) ; pokedex = dex});
+    let selecteds = Array(6).fill("")
 </script>
 
 <style></style>
 
-<input type="text" placeholder="Gotta catch at least one" list="pokedex"/>
-<h1>Hello {name}!</h1>
-<datalist id="pokedex">
-	{#each pokedex as  poke , i}
-		<option>{poke}</option>
-	{/each}
-</datalist>
+<div id="team">
+{#each selecteds as member}
+<Member pokedex="{pokedex}" bind:selected={member}></Member>
+{/each}
+</div>
+
+
+<h2>team sofar</h2>
+<ul>
+{#each selecteds as member}
+    <li>{member}</li>
+{/each}
+</ul>

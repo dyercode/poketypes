@@ -1,9 +1,10 @@
 import  axios, { AxiosResponse }  from 'axios';
 
-const baseUrl = "https://pokeapi.co/api/v2/"
+const baseUrl = 'https://pokeapi.co/api/v2/'
 const typeEndpoint = 'type/'
 const pokemonEndpoint = 'pokemon/'
 const pokemonListStartUrl: string = baseUrl + pokemonEndpoint + '?limit=60';
+const typeListStartUrl: string = baseUrl + typeEndpoint + '?limit=60';
 
 class Pokemon {
     name: string;
@@ -12,7 +13,7 @@ class Pokemon {
 
 class RefValue {
     name: string;
-    url : string;
+    url: string;
 }
 
 class PokemonApi {
@@ -20,7 +21,7 @@ class PokemonApi {
     types: RefValue[]
 }
 
-class PokemonListApi {
+class ListApi {
     name: string;
     next?: string;
     results: RefValue[];
@@ -28,16 +29,32 @@ class PokemonListApi {
 
 class Type {}
 
-export function fetchPokedex (dex: string[], url: string = pokemonListStartUrl) : Promise<string[]>  {
-    let initResult: Promise<AxiosResponse<PokemonListApi>> = axios.get(url);
-    return initResult.then((soFar: AxiosResponse<PokemonListApi> ) => {
+export function getPokedex (dex: string[], url: string = pokemonListStartUrl): Promise<string[]>  {
+    const initResult: Promise<AxiosResponse<ListApi>> = axios.get(url);
+    return initResult.then((soFar: AxiosResponse<ListApi> ) => {
+        let newNames = [];
+        if (soFar.data.results) {
+            newNames = soFar.data.results.map(rv => rv.name)
+        }
+        const newDex = dex.concat(newNames);
+        if (soFar.data.next !== null) {
+            return getPokedex(newDex, soFar.data.next);
+        } else {
+            return newDex;
+        }
+    });
+}
+
+export function getTypedex (dex: string[], url: string = typeListStartUrl): Promise<string[]>  {
+    const initResult: Promise<AxiosResponse<ListApi>> = axios.get(url);
+    return initResult.then((soFar: AxiosResponse<ListApi> ) => {
         let newNames = [] 
         if (soFar.data.results) {
             newNames = soFar.data.results.map(rv => rv.name)
         }
-        let newDex = dex.concat(newNames);
+        const newDex = dex.concat(newNames);
         if (soFar.data.next !== null) {
-            return fetchPokedex(newDex, soFar.data.next);
+            return getTypedex(newDex, soFar.data.next);
         } else {
             return newDex;
         }

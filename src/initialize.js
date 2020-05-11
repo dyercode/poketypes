@@ -1,3 +1,3 @@
-import { fetchPokedex , pokemonListStartUrl} from './PokeApi';
+import { getPokedex } from './PokeApi';
 
-export let almostPokedex = fetchPokedex([] )
+export const almostPokedex = getPokedex([] )
