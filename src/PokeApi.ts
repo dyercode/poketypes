@@ -1,15 +1,11 @@
 import axios, {AxiosResponse} from 'axios';
+import {Type} from "./model/type";
 
 const baseUrl = 'https://pokeapi.co/api/v2/'
 const typeEndpoint = 'type/'
 const pokemonEndpoint = 'pokemon/'
 const pokemonListStartUrl: string = baseUrl + pokemonEndpoint + '?limit=60';
 const typeListStartUrl: string = baseUrl + typeEndpoint + '?limit=60';
-
-class Pokemon {
-    name: string;
-    types: string[];
-}
 
 class RefValue {
     name: string;
@@ -22,13 +18,6 @@ class ListApi {
     results: RefValue[];
 }
 
-class Type {
-    name: string;
-    noDamageFrom: string[]
-    halfDamageFrom: string[]
-    doubleDamageFrom: string[]
-
-}
 
 function fromTypeApi(ta: TypeApi): Type {
     return {
@@ -86,7 +75,7 @@ function getThinTypedex(dex: string[] = [], url: string = typeListStartUrl): Pro
 export function getTypedex(): Promise<Type[]> {
     return getThinTypedex()
         .then((names: string[]) => {
-            let fullTypes: Promise<TypeApi>[] = names.map(name => {
+            const fullTypes: Promise<TypeApi>[] = names.map(name => {
                 return axios.get(baseUrl + typeEndpoint + name)
                     .then(r => r.data);
             });
