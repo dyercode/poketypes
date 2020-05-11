@@ -1,4 +1,4 @@
-import  axios, { AxiosResponse }  from 'axios';
+import axios, {AxiosResponse} from 'axios';
 
 const baseUrl = 'https://pokeapi.co/api/v2/'
 const typeEndpoint = 'type/'
@@ -27,11 +27,33 @@ class Type {
     noDamageFrom: string[]
     halfDamageFrom: string[]
     doubleDamageFrom: string[]
+
 }
 
-export function getPokedex (dex: string[], url: string = pokemonListStartUrl): Promise<string[]>  {
+function fromTypeApi(ta: TypeApi): Type {
+    return {
+        name: ta.name
+        , noDamageFrom: ta.damage_relations.no_damage_from.map(d => d.name)
+        , halfDamageFrom: ta.damage_relations.half_damage_from.map(d => d.name)
+        , doubleDamageFrom: ta.damage_relations.double_damage_from.map(d => d.name)
+    } as Type;
+}
+
+class DamageRelationsApi {
+    no_damage_from: RefValue[]
+    half_damage_from: RefValue[]
+    double_damage_from: RefValue[]
+}
+
+class TypeApi {
+    name: string;
+    damage_relations: DamageRelationsApi;
+
+}
+
+export function getPokedex(dex: string[], url: string = pokemonListStartUrl): Promise<string[]> {
     const initResult: Promise<AxiosResponse<ListApi>> = axios.get(url);
-    return initResult.then((soFar: AxiosResponse<ListApi> ) => {
+    return initResult.then((soFar: AxiosResponse<ListApi>) => {
         let newNames = [];
         if (soFar.data.results) {
             newNames = soFar.data.results.map(rv => rv.name)
@@ -45,18 +67,32 @@ export function getPokedex (dex: string[], url: string = pokemonListStartUrl): P
     });
 }
 
-export function getTypedex (dex: string[], url: string = typeListStartUrl): Promise<string[]>  {
+function getThinTypedex(dex: string[] = [], url: string = typeListStartUrl): Promise<string[]> {
     const initResult: Promise<AxiosResponse<ListApi>> = axios.get(url);
-    return initResult.then((soFar: AxiosResponse<ListApi> ) => {
-        let newNames = [] 
+    return initResult.then((soFar: AxiosResponse<ListApi>) => {
+        let newNames = []
         if (soFar.data.results) {
             newNames = soFar.data.results.map(rv => rv.name)
         }
         const newDex = dex.concat(newNames);
         if (soFar.data.next !== null) {
-            return getTypedex(newDex, soFar.data.next);
+            return getThinTypedex(newDex, soFar.data.next);
         } else {
             return newDex;
         }
     });
+}
+
+export function getTypedex(): Promise<Type[]> {
+    return getThinTypedex()
+        .then((names: string[]) => {
+            let fullTypes: Promise<TypeApi>[] = names.map(name => {
+                return axios.get(baseUrl + typeEndpoint + name)
+                    .then(r => r.data);
+            });
+            return Promise.all(fullTypes);
+        })
+        .then((apiData: TypeApi[]) => {
+            return apiData.map(fromTypeApi)
+        });
 }

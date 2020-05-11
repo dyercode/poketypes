@@ -1,9 +1,14 @@
 <script lang="typescript">
-    import { almostPokedex } from '../initialize';
+    import {almostPokedex} from '../initialize';
     import Member from './Member.svelte';
+    import Effectiveness from "./Effectiveness.svelte";
+
     export let name;
-    let pokedex= [];
-    almostPokedex.then((dex) => {console.log(dex) ; pokedex = dex});
+    let pokedex = [];
+    almostPokedex.then((dex) => {
+        console.log(dex);
+        pokedex = dex
+    });
     let selecteds = Array(6).fill("")
 </script>
 
@@ -11,7 +16,7 @@
 
 <div id="team">
 {#each selecteds as member}
-<Member pokedex="{pokedex}" bind:selected={member}></Member>
+    <Member pokedex="{pokedex}" bind:selected={member}/>
 {/each}
 </div>
 
@@ -22,3 +27,5 @@
     <li>{member}</li>
 {/each}
 </ul>
+
+<Effectiveness/>
