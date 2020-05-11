@@ -28,15 +28,15 @@ class PokemonListApi {
 
 class Type {}
 
-export function fetchPokedex (dex: string[], url :string = pokemonListStartUrl) : Promise<string[]>  {
-    let initResult: Promise<AxiosResponse<PokemonListApi>> = axios.get(pokemonListStartUrl);
+export function fetchPokedex (dex: string[], url: string = pokemonListStartUrl) : Promise<string[]>  {
+    let initResult: Promise<AxiosResponse<PokemonListApi>> = axios.get(url);
     return initResult.then((soFar: AxiosResponse<PokemonListApi> ) => {
         let newNames = [] 
         if (soFar.data.results) {
             newNames = soFar.data.results.map(rv => rv.name)
         }
         let newDex = dex.concat(newNames);
-        if (soFar.data.next) {
+        if (soFar.data.next !== null) {
             return fetchPokedex(newDex, soFar.data.next);
         } else {
             return newDex;

@@ -7,10 +7,10 @@
 
 <style></style>
 
-<input type="text" placeholder="Gotta catch at least one"/>
+<input type="text" placeholder="Gotta catch at least one" list="pokedex"/>
 <h1>Hello {name}!</h1>
-<ul>
-	{#each pokedex as { name }, i}
-		<li>(#{i}): {name} </li>
+<datalist id="pokedex">
+	{#each pokedex as  poke , i}
+		<option>{poke}</option>
 	{/each}
-</ul>
+</datalist>
