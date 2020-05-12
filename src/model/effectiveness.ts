@@ -1,8 +1,71 @@
+import {Type} from "./type";
+
 export enum Effectiveness {
-    Immune,
+    Immune = 1,
     Quarter,
     Half,
     Neutral,
     Double,
-    Quardrouple
+    Quadrouple
 }
+
+const {Half, Double, Immune, Neutral, Quadrouple, Quarter} = Effectiveness;
+
+function singleTypeEffectiveness(attack: Type, defenseType: Type) {
+    const doubles: Effectiveness[] =
+        defenseType.doubleDamageFrom.flatMap((effectiveName) => {
+            if (effectiveName === attack.name) {
+                return [Double];
+            } else return [];
+        });
+
+    const half: Effectiveness[] =
+        defenseType.halfDamageFrom.flatMap((effectiveName) => {
+            if (effectiveName === attack.name) {
+                return [Half];
+            } else return [];
+        });
+
+    const immune: Effectiveness[] =
+        defenseType.noDamageFrom.flatMap((effectiveName) => {
+            if (effectiveName === attack.name) {
+                return [Immune];
+            } else return [];
+        });
+
+    return [doubles, half, immune].flat()[0] || Neutral;
+}
+
+function lookup(types: Effectiveness[]): Effectiveness {
+    const sorted = types.slice().sort();
+    if (sorted.length == 1) {
+        return sorted[0];
+    } else if (sorted.includes(Immune)) {
+        console.log('immune was in sorted')
+        return Immune;
+    } else if (sorted === [Half, Half]) {
+        return Quarter;
+    } else if (sorted === [Half, Neutral]) {
+        return Half;
+    } else if (sorted === [Half, Effectiveness.Double]) {
+        return Neutral;
+    } else if (sorted === [Neutral, Neutral]) {
+        return Neutral;
+    } else if (sorted === [Neutral, Double]) {
+        return Double;
+    } else if (sorted === [Effectiveness.Double, Effectiveness.Double]) {
+        return Quadrouple;
+    } else {
+        console.log("didn't match anything")
+        console.log(sorted)
+        console.log([Effectiveness.Double, Effectiveness.Double])
+        return Neutral;
+    }
+}
+
+export function attackEffectiveness(attack: Type, types: Type[]): Effectiveness {
+    const individualEffectivenesses = types.map(t => singleTypeEffectiveness(attack, t))
+    console.log(individualEffectivenesses)
+    return lookup(individualEffectivenesses);
+}
+
