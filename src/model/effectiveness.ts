@@ -41,24 +41,20 @@ function lookup(types: Effectiveness[]): Effectiveness {
     if (sorted.length == 1) {
         return sorted[0];
     } else if (sorted.includes(Immune)) {
-        console.log('immune was in sorted')
         return Immune;
-    } else if (sorted === [Half, Half]) {
+    } else if (sorted.every(val => val === Half)) {
         return Quarter;
     } else if (sorted === [Half, Neutral]) {
         return Half;
-    } else if (sorted === [Half, Effectiveness.Double]) {
+    } else if (sorted === [Half, Double]) {
         return Neutral;
     } else if (sorted === [Neutral, Neutral]) {
         return Neutral;
     } else if (sorted === [Neutral, Double]) {
         return Double;
-    } else if (sorted === [Effectiveness.Double, Effectiveness.Double]) {
+    } else if (sorted.every((val)=> val === Double)) {
         return Quadrouple;
     } else {
-        console.log("didn't match anything")
-        console.log(sorted)
-        console.log([Effectiveness.Double, Effectiveness.Double])
         return Neutral;
     }
 }
