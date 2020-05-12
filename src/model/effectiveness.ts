@@ -1,4 +1,4 @@
-import {Type} from "./type";
+import { Type } from "./type";
 
 export enum Effectiveness {
     Immune = 1,
@@ -9,7 +9,7 @@ export enum Effectiveness {
     Quadrouple
 }
 
-const {Half, Double, Immune, Neutral, Quadrouple, Quarter} = Effectiveness;
+const { Half, Double, Immune, Neutral, Quadrouple, Quarter } = Effectiveness;
 
 function singleTypeEffectiveness(attack: Type, defenseType: Type) {
     const doubles: Effectiveness[] =
@@ -52,7 +52,7 @@ function lookup(types: Effectiveness[]): Effectiveness {
         return Neutral;
     } else if (sorted === [Neutral, Double]) {
         return Double;
-    } else if (sorted.every((val)=> val === Double)) {
+    } else if (sorted.every((val) => val === Double)) {
         return Quadrouple;
     } else {
         return Neutral;
@@ -61,7 +61,6 @@ function lookup(types: Effectiveness[]): Effectiveness {
 
 export function attackEffectiveness(attack: Type, types: Type[]): Effectiveness {
     const individualEffectivenesses = types.map(t => singleTypeEffectiveness(attack, t))
-    console.log(individualEffectivenesses)
     return lookup(individualEffectivenesses);
 }
 

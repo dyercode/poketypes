@@ -2,6 +2,7 @@
     import {almostPokedex} from '../initialize';
     import Member from './Member.svelte';
     import Effectiveness from "./Effectiveness.svelte";
+    import {team} from './store.ts';
 
     export let name;
     let selecteds = Array(6).fill("")
@@ -23,4 +24,4 @@
 {/each}
 </ul>
 
-<Effectiveness/>
+<Effectiveness team={$team} />

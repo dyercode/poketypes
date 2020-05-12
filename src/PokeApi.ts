@@ -1,5 +1,5 @@
-import axios, {AxiosResponse} from 'axios';
-import {Type} from "./model/type";
+import axios, { AxiosResponse } from 'axios';
+import { Type } from "./model/type";
 
 const baseUrl = 'https://pokeapi.co/api/v2/'
 const typeEndpoint = 'type/'
@@ -28,6 +28,14 @@ function fromTypeApi(ta: TypeApi): Type {
     } as Type;
 }
 
+function fromPokemonApi(pa: PokemonApi) : Pokemon {
+    let converted =  {
+        name: pa.name,
+        types: pa.types.map(t => t.type.name)
+    } as Pokemon;
+    return converted;
+}
+
 class DamageRelationsApi {
     no_damage_from: RefValue[]
     half_damage_from: RefValue[]
@@ -37,7 +45,11 @@ class DamageRelationsApi {
 class TypeApi {
     name: string;
     damage_relations: DamageRelationsApi;
+}
 
+class PokemonApi {
+    name: string;
+    types: {type: RefValue}[]
 }
 
 export function getPokedex(dex: string[] = [], url: string = pokemonListStartUrl): Promise<string[]> {
@@ -84,4 +96,12 @@ export function getTypedex(): Promise<Type[]> {
         .then((apiData: TypeApi[]) => {
             return apiData.map(fromTypeApi)
         });
+}
 
+export function getPokemon(name: string): Promise<Pokemon> {
+    return axios.get(baseUrl + pokemonEndpoint + name)
+        .then((response) => {
+            return response.data as PokemonApi;
+        })
+        .then(fromPokemonApi);
+}

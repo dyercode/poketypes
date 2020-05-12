@@ -1,7 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import '../../node_modules/awesomplete/awesomplete.js'
-	import {thinPokedex} from './store.ts'
+	import {team, thinPokedex} from './store.ts'
+	import {getPokemon} from '../PokeApi.ts';
 	export let selected;
 	export let index;
 	onMount(() => {
@@ -13,6 +14,15 @@
 		});
 		input.addEventListener('awesomplete-selectcomplete', (it)=> {
 			selected = it.text.value;
+			getPokemon(it.text.value)
+				.then(newMon => {
+					team.update(current => {
+						console.dir(current);
+						current[index] = newMon;
+						console.dir(current);
+						return current;
+						});
+				});
 		});
 	});
 </script>
