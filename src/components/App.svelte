@@ -4,19 +4,14 @@
     import Effectiveness from "./Effectiveness.svelte";
 
     export let name;
-    let pokedex = [];
-    almostPokedex.then((dex) => {
-        console.log(dex);
-        pokedex = dex
-    });
     let selecteds = Array(6).fill("")
 </script>
 
 <style></style>
 
 <div id="team">
-{#each selecteds as member}
-    <Member pokedex="{pokedex}" bind:selected={member}/>
+{#each selecteds as member, i}
+    <Member bind:selected={member} index="{i}"/>
 {/each}
 </div>
 

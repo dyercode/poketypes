@@ -1,5 +1,5 @@
 import {getPokedex, getTypedex} from './PokeApi';
-import {typedex} from "./components/store";
+import {typedex, thinPokedex} from "./components/store";
 
-export const almostPokedex = getPokedex([])
+getPokedex().then(thinPokedex.set);
 getTypedex().then(typedex.set);
