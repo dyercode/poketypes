@@ -1,5 +1,22 @@
 <script>
-    import {typedex} from './store.ts'
+    import {typedex, team} from './store.ts'
+    import {Effectiveness, attackEffectiveness} from '../model/effectiveness.ts'
+    const {Half, Double, Immune, Neutral, Quadrouple, Quarter} = Effectiveness;
+
+    function teamEffectiveness(attackType, testEffective)  {
+        return $team
+            .filter(i => i !== null)
+            .map(member => {
+                if (member) {
+                    if (attackEffectiveness(attackType, member.types) === testEffective) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            })
+            .reduce((acc, val) => acc + val, 0)
+    }
 </script>
 
 <table>
@@ -18,12 +35,12 @@
     {#each $typedex as type}
         <tr>
             <th>{type.name}</th>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td>{teamEffectiveness(type, Immune)}</td>
+            <td>{teamEffectiveness(type, Quarter)}</td>
+            <td>{teamEffectiveness(type, Half)}</td>
+            <td>{teamEffectiveness(type, Neutral)}</td>
+            <td>{teamEffectiveness(type, Double)}</td>
+            <td>{teamEffectiveness(type, Quadrouple)}</td>
         </tr>
     {/each}
     </tbody>
