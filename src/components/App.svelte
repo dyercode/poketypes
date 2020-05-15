@@ -1,7 +1,6 @@
-<script lang="typescript">
-    import {almostPokedex} from '../initialize';
+<script>
     import Member from './Member.svelte';
-    import Effectiveness from "./Effectiveness.svelte";
+    import Effectiveness from "./Effectiveness";
     import {team} from './store.ts';
 
     export let name;
@@ -17,11 +16,11 @@
 </div>
 
 
-<h2>team sofar</h2>
-<ul>
-{#each selecteds as member}
-    <li>{member}</li>
-{/each}
-</ul>
+<!--<h2>team sofar</h2>-->
+<!--<ul>-->
+<!--{#each selecteds as member}-->
+<!--    <li>{member}</li>-->
+<!--{/each}-->
+<!--</ul>-->
 
 <Effectiveness team={$team} />

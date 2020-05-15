@@ -1,5 +1,14 @@
-import { writable } from 'svelte/store';
+import {derived, get, Writable, writable} from 'svelte/store';
+import {Config} from "./config";
 
+export const config: Writable<Config> = writable({useUnknown: false, useShadow: false});
 export const team = writable(Array(6).fill(null))
-export const typedex = writable([])
+export const typedexRaw = writable([])
+export const typedex = derived(typedexRaw, types => {
+    const c = get(config)
+    return types.filter(t => {
+        return (t.name !== 'shadow' || c.useShadow) && (t.name !== 'unknown' || c.useUnknown);
+    });
+});
+
 export const thinPokedex = writable([])

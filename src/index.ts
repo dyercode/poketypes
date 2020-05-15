@@ -1,10 +1,11 @@
+import './initialize.ts';
 import App from './components/App.svelte';
 
 const app = new App({
-  target: document.body,
-  props: {
-    name: 'Svelte',
-  },
+    target: document.body,
+    props: {
+        name: 'Svelte',
+    },
 });
 
 export default app;
