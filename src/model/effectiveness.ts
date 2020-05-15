@@ -1,4 +1,4 @@
-import { Type } from "./type";
+import {Type} from "./type";
 
 export enum Effectiveness {
     Immune = 1,
@@ -9,7 +9,7 @@ export enum Effectiveness {
     Quadrouple
 }
 
-const { Half, Double, Immune, Neutral, Quadrouple, Quarter } = Effectiveness;
+const {Half, Double, Immune, Neutral, Quadrouple, Quarter} = Effectiveness;
 
 function singleTypeEffectiveness(attack: Type, defenseType: Type) {
     const doubles: Effectiveness[] =

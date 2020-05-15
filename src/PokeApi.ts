@@ -1,5 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
-import { Type } from "./model/type";
+import {Type} from "./model/type";
 
 const baseUrl = 'https://pokeapi.co/api/v2/'
 const typeEndpoint = 'type/'
@@ -28,12 +27,11 @@ function fromTypeApi(ta: TypeApi): Type {
     } as Type;
 }
 
-function fromPokemonApi(pa: PokemonApi) : Pokemon {
-    let converted =  {
+function fromPokemonApi(pa: PokemonApi): Pokemon {
+    return {
         name: pa.name,
         types: pa.types.map(t => t.type.name)
     } as Pokemon;
-    return converted;
 }
 
 class DamageRelationsApi {
@@ -49,35 +47,36 @@ class TypeApi {
 
 class PokemonApi {
     name: string;
-    types: {type: RefValue}[]
+    types: { type: RefValue }[]
 }
 
 export function getPokedex(dex: string[] = [], url: string = pokemonListStartUrl): Promise<string[]> {
-    const initResult: Promise<AxiosResponse<ListApi>> = axios.get(url);
-    return initResult.then((soFar: AxiosResponse<ListApi>) => {
-        let newNames = [];
-        if (soFar.data.results) {
-            newNames = soFar.data.results.map(rv => rv.name)
-        }
-        const newDex = dex.concat(newNames);
-        if (soFar.data.next !== null) {
-            return getPokedex(newDex, soFar.data.next);
-        } else {
-            return newDex;
-        }
-    });
+    return fetch(url)
+        .then(response => response.json())
+        .then((soFar: ListApi) => {
+            let newNames = [];
+            if (soFar.results) {
+                newNames = soFar.results.map(rv => rv.name)
+            }
+            const newDex = dex.concat(newNames);
+            if (soFar.next !== null) {
+                return getPokedex(newDex, soFar.next);
+            } else {
+                return newDex;
+            }
+        });
 }
 
 function getThinTypedex(dex: string[] = [], url: string = typeListStartUrl): Promise<string[]> {
-    const initResult: Promise<AxiosResponse<ListApi>> = axios.get(url);
-    return initResult.then((soFar: AxiosResponse<ListApi>) => {
+    const initResult: Promise<ListApi> = fetch(url).then(response => response.json());
+    return initResult.then((soFar: ListApi) => {
         let newNames = []
-        if (soFar.data.results) {
-            newNames = soFar.data.results.map(rv => rv.name)
+        if (soFar.results) {
+            newNames = soFar.results.map(rv => rv.name)
         }
         const newDex = dex.concat(newNames);
-        if (soFar.data.next !== null) {
-            return getThinTypedex(newDex, soFar.data.next);
+        if (soFar.next !== null) {
+            return getThinTypedex(newDex, soFar.next);
         } else {
             return newDex;
         }
@@ -88,8 +87,8 @@ export function getTypedex(): Promise<Type[]> {
     return getThinTypedex()
         .then((names: string[]) => {
             const fullTypes: Promise<TypeApi>[] = names.map(name => {
-                return axios.get(baseUrl + typeEndpoint + name)
-                    .then(r => r.data);
+                return fetch(baseUrl + typeEndpoint + name)
+                    .then(r => r.json());
             });
             return Promise.all(fullTypes);
         })
@@ -99,9 +98,7 @@ export function getTypedex(): Promise<Type[]> {
 }
 
 export function getPokemon(name: string): Promise<Pokemon> {
-    return axios.get(baseUrl + pokemonEndpoint + name)
-        .then((response) => {
-            return response.data as PokemonApi;
-        })
+    return fetch(baseUrl + pokemonEndpoint + name)
+        .then((response) => response.json())
         .then(fromPokemonApi);
 }

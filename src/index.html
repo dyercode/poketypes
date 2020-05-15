@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="./style.css" type="text/css">
+    <title>PokeTypes</title>
 </head>
 <body>
-    <script src="./index.ts"></script>
+<script src="./index.ts"></script>
+
+<script>if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+    })
+}</script>
 </body>
 </html>
