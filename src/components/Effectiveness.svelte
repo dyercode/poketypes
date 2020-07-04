@@ -1,17 +1,19 @@
-<script>
-    import {typedex} from './store.ts'
-    import {Effectiveness, attackEffectiveness} from '../model/effectiveness.ts'
+<script lang="typescript">
+    import {typedex} from './store';
+    import {Type} from '../model/type';
+    import {Pokemon} from '../model/pokemon';
+    import {Effectiveness, attackEffectiveness} from '../model/effectiveness';
 
     const {Half, Double, Immune, Neutral, Quadrouple, Quarter} = Effectiveness;
 
-    export let team;
+    export let team: Pokemon[];
 
-    function teamEffectiveness(attackType, testEffective, inteam) {
+    function teamEffectiveness(attackType: Type, testEffective: Effectiveness, inteam: Pokemon[]) {
         if (inteam) {
             return inteam
-                    .filter(i => i !== null && i !== undefined)
+                    .filter((i: Pokemon) => i !== null && i !== undefined)
                     .map(member => {
-                        const memberTypes = member.types.map(name => $typedex.find(type => type.name == name))
+                        const memberTypes = member.types.map((name: string) => $typedex.find(type => type.name == name))
                         if (member) {
                             if (attackEffectiveness(attackType, memberTypes) === testEffective) {
                                 return 1;

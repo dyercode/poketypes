@@ -1,10 +1,9 @@
-<script>
-    import Member from './Member.svelte';
-    import Effectiveness from "./Effectiveness";
-    import {team} from './store.ts';
+<script lang="typescript">
+    import { team } from './components/store';
+    import Member from './components/Member.svelte';
+    import Effectiveness from "./components/Effectiveness.svelte";
 
-    export let name;
-    let selecteds = Array(6).fill("")
+    const selecteds = Array(6).fill("");
 </script>
 
 <style></style>

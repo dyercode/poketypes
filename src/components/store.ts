@@ -1,5 +1,6 @@
-import {derived, get, Writable, writable} from 'svelte/store';
+import { writable, Writable, derived, get } from 'svelte/store';
 import {Config} from "./config";
+import {Pokemon} from '../model/pokemon';
 
 export const config: Writable<Config> = writable({useUnknown: false, useShadow: false});
 export const team = writable(Array(6).fill(null))

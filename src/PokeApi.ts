@@ -1,4 +1,5 @@
 import {Type} from "./model/type";
+import {Pokemon} from "./model/pokemon";
 
 const baseUrl = 'https://pokeapi.co/api/v2/'
 const typeEndpoint = 'type/'

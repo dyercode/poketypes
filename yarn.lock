@@ -792,6 +792,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@emmetio/extract-abbreviation@0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@emmetio/extract-abbreviation/-/extract-abbreviation-0.1.6.tgz#e4a9856c1057f0aff7d443b8536477c243abe28c"
+  integrity sha512-Ce3xE2JvTSEbASFbRbA1gAIcMcZWdS2yUYRaQbeM0nbOzaZrUYfa3ePtcriYRZOZmr+CkKA+zbjhvTpIOAYVcw==
+
 "@iarna/toml@^2.2.0":
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.5.tgz#b32366c89b43c6f8cefbdefac778b9c828e3ba8c"
@@ -851,6 +856,11 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
+"@types/awesomplete@^1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@types/awesomplete/-/awesomplete-1.1.10.tgz#402ba293273b3d3a40c3569f123e2fa0d2681bdf"
+  integrity sha512-rNtfXy5pkneFI7zeMOiZ6ES9NgLt8PVuCtEH/K1QCsB6CSRrKjEbrbqWH1MizJ3zyfJH7dfEfRdkP+CyqaHMHQ==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
@@ -875,6 +885,11 @@
   version "13.13.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.5.tgz#96ec3b0afafd64a4ccea9107b75bf8489f0e5765"
   integrity sha512-3ySmiBYJPqgjiHA7oEaIo2Rzz0HrOZ7yrNO5HWyaE5q0lQ3BppDZ3N53Miz8bw2I7gh1/zir2MGVZBvpb1zq9g==
+
+"@types/parse-json@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
+  integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
 "@types/pug@^2.0.4":
   version "2.0.4"
@@ -1807,6 +1822,17 @@ cosmiconfig@^5.0.0:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
+cosmiconfig@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/cosmiconfig/-/cosmiconfig-6.0.0.tgz#da4fee853c52f6b1e6935f41c1a2fc50bd4a9982"
+  integrity sha512-xb3ZL6+L8b9JLLCx3ZdoZy4+2ECphCMo2PwqgP1tlfVq6M6YReyzBJtvWWtbDSpNr9hn96pkCiZqUcFEc+54Qg==
+  dependencies:
+    "@types/parse-json" "^4.0.0"
+    import-fresh "^3.1.0"
+    parse-json "^5.0.0"
+    path-type "^4.0.0"
+    yaml "^1.7.2"
+
 create-ecdh@^4.0.0:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.3.tgz#c9111b6f33045c4697f144787f9254cdc77c45ff"
@@ -2541,6 +2567,11 @@ estraverse@^5.1.0:
   resolved "https://registry.yarnpkg.com/estraverse/-/estraverse-5.1.0.tgz#374309d39fd935ae500e7b92e8a6b4c720e59642"
   integrity sha512-FyohXK+R0vE+y1nHLoBM7ZTyqRpqAlhdZHCWIWEviFLiGB8b04H6bQs8G+XTthacvT8VuwvteiP7RJSxMs8UEw==
 
+estree-walker@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-2.0.1.tgz#f8e030fb21cefa183b44b7ad516b747434e7a3e0"
+  integrity sha512-tF0hv+Yi2Ot1cwj9eYHtxC0jB9bmjacjQs6ZBTj82H8JwUywFuc+7E83NWfNMwHXZc11mjfFcVXPe9gEP4B8dg==
+
 esutils@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
@@ -3120,7 +3151,7 @@ import-fresh@^2.0.0:
     caller-path "^2.0.0"
     resolve-from "^3.0.0"
 
-import-fresh@^3.0.0:
+import-fresh@^3.0.0, import-fresh@^3.1.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.2.1.tgz#633ff618506e793af5ac91bf48b72677e15cbe66"
   integrity sha512-6e1q1cnWP2RXD9/keSkxHScg508CdXqXWgWBaETNhyuBFz+kUZlKboh+ISK+bU++DmbHimVBrOz/zzPe0sZ3sQ==
@@ -3574,6 +3605,11 @@ json5@^2.1.2:
   dependencies:
     minimist "^1.2.5"
 
+jsonc-parser@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-1.0.3.tgz#1d53d7160e401a783dbceabaad82473f80e6ad7e"
+  integrity sha512-hk/69oAeaIzchq/v3lS50PXuzn5O2ynldopMC+SWBql7J2WtdptfB9dy8Y7+Og5rPkTCpn83zTiO8FMcqlXJ/g==
+
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -3636,6 +3672,11 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+lines-and-columns@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
+  integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
+
 locate-path@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"
@@ -3679,7 +3720,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4:
+lodash@^4.17.10, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -3711,6 +3752,13 @@ magic-string@^0.22.4:
   integrity sha512-oreip9rJZkzvA8Qzk9HFs8fZGF/u7H/gtrE8EN6RjKJ9kh2HlC+yQ2QezifqTZfGyiuAV0dRv5a+y/8gBb1m9w==
   dependencies:
     vlq "^0.2.2"
+
+magic-string@^0.25.3:
+  version "0.25.7"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.25.7.tgz#3f497d6fd34c669c6798dcb821f2ef31f5445051"
+  integrity sha512-4CrMT5DOHTDk4HYDlzmwu4FVCcIYI8gauveasrdCu2IKIFOJ3f0v/8MDGJCDL9oD2ppz/Av1b0Nj345H9M+XIA==
+  dependencies:
+    sourcemap-codec "^1.4.4"
 
 make-error@^1.1.1:
   version "1.3.6"
@@ -4304,6 +4352,16 @@ parse-json@^4.0.0:
     error-ex "^1.3.1"
     json-parse-better-errors "^1.0.1"
 
+parse-json@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/parse-json/-/parse-json-5.0.0.tgz#73e5114c986d143efa3712d4ea24db9a4266f60f"
+  integrity sha512-OOY5b7PAEFV0E2Fir1KOkxchnZNCdowAJgQ5NuxjpBKTRP3pQhwkrkxqQjeoKJ+fO7bCpmIZaogI4eZGDMEGOw==
+  dependencies:
+    "@babel/code-frame" "^7.0.0"
+    error-ex "^1.3.1"
+    json-parse-better-errors "^1.0.1"
+    lines-and-columns "^1.1.6"
+
 parse5@5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-5.1.0.tgz#c59341c9723f414c452975564c7c00a68d58acd2"
@@ -4358,6 +4416,11 @@ path-parse@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
   integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+
+path-type@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
+  integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
 pathval@^1.1.0:
   version "1.1.0"
@@ -4777,6 +4840,16 @@ prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
+
+prettier-plugin-svelte@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-svelte/-/prettier-plugin-svelte-1.1.0.tgz#e6ec282d8457598b0c02164083b11ad8cb8ab304"
+  integrity sha512-wmIggG/ryV0wcmE9D5p+k5TwKDpS2SGKJpF6IV1aYHK7dkBJD+di1w47Ci00DRsI4RrXZRC2Ef37DSyrTb6Zqg==
+
+prettier@2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.0.5.tgz#d6d56282455243f2f92cc1716692c08aa31522d4"
+  integrity sha512-7PtVymN48hGcO4fGjybyBSIWDsLU4H4XlvOHfq91pz9kkGlonzwTfYkaIEwiRg/dAJF9YlbsduBAgtYLi+8cFg==
 
 private@^0.1.8:
   version "0.1.8"
@@ -5388,6 +5461,16 @@ source-map@^0.5.0, source-map@^0.5.6:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
 
+source-map@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
+  integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
+
+sourcemap-codec@^1.4.4:
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
+  integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
+
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/split-string/-/split-string-3.1.0.tgz#7cb09dda3a86585705c64b39a6466038682e8fe2"
@@ -5636,6 +5719,43 @@ supports-color@^6.1.0:
   dependencies:
     has-flag "^3.0.0"
 
+svelte-check@^0.1.41:
+  version "0.1.41"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-0.1.41.tgz#f1b748c6acd8bdca8e7eaf052a226b3d1521920b"
+  integrity sha512-kMVNm1Kq89xWtcEXPY4ak2rUvFQBa0LbSZW8conlDztssQm0tcmuDlb93l2NPJ/gkPpuB0ZT2shTV6qetsMOsQ==
+  dependencies:
+    chalk "^4.0.0"
+    glob "^7.1.6"
+    minimist "^1.2.5"
+    svelte-language-server "*"
+    vscode-languageserver "6.1.1"
+    vscode-languageserver-protocol "3.15.3"
+    vscode-languageserver-types "3.15.1"
+    vscode-uri "2.1.1"
+
+svelte-language-server@*:
+  version "0.10.60"
+  resolved "https://registry.yarnpkg.com/svelte-language-server/-/svelte-language-server-0.10.60.tgz#29c0ef26558d0698352ffe2a38c6cd984b6cddb3"
+  integrity sha512-bg3XBK+mWIHgBRCbgOrgdRb6w0tKsW9lkfNPuWY+eaMJEFeW5rzWxZfBdACtgm6NociOfU9adw7wh3ZB64nemQ==
+  dependencies:
+    cosmiconfig "^6.0.0"
+    estree-walker "^2.0.1"
+    lodash "^4.17.10"
+    magic-string "^0.25.3"
+    prettier "2.0.5"
+    prettier-plugin-svelte "1.1.0"
+    source-map "^0.7.3"
+    svelte "3.23.0"
+    svelte-preprocess "~3.7.4"
+    svelte2tsx "*"
+    typescript "*"
+    vscode-css-languageservice "4.1.0"
+    vscode-emmet-helper "1.2.17"
+    vscode-html-languageservice "3.0.4-next.15"
+    vscode-languageserver "6.1.1"
+    vscode-languageserver-types "3.15.1"
+    vscode-uri "2.1.1"
+
 svelte-preprocess@^3.9.11:
   version "3.9.11"
   resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-3.9.11.tgz#94f7abdfce79e828d350ae57be704d4293718b68"
@@ -5645,6 +5765,26 @@ svelte-preprocess@^3.9.11:
     "@types/sass" "^1.16.0"
     detect-indent "^6.0.0"
     strip-indent "^3.0.0"
+
+svelte-preprocess@~3.7.4:
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-3.7.4.tgz#d10cf9b7c96c2b123da90438a3e9814737347e8d"
+  integrity sha512-0nW7TIjbav2nmw1Y7EAFRRkhNVwJ3zKN85/eITLQMkPuhqHO2i2IK0O3y4YXsSXlc0VGI5jQDVXkcXpga6zzew==
+  dependencies:
+    "@types/pug" "^2.0.4"
+    "@types/sass" "^1.16.0"
+    detect-indent "^6.0.0"
+    strip-indent "^3.0.0"
+
+svelte2tsx@*:
+  version "0.1.46"
+  resolved "https://registry.yarnpkg.com/svelte2tsx/-/svelte2tsx-0.1.46.tgz#2023ea75d06fa9f53a2ed38e617be101145e764f"
+  integrity sha512-bARqgP6UHkZQigidR9OvJYgub6WVv1V3u7dAdtw90EvptRYMpKkNAp1sYOkmi07l6z4dwOJzu3kqIC7EQDIPiQ==
+
+svelte@3.23.0:
+  version "3.23.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.23.0.tgz#bbcd6887cf588c24a975b14467455abfff9acd3f"
+  integrity sha512-cnyd96bK/Nw5DnYuB1hzm5cl6+I1fpmdKOteA7KLzU9KGLsLmvWsSkSKbcntzODCLmSySN3HjcgTHRo6/rJNTw==
 
 svelte@^3.23.2:
   version "3.23.2"
@@ -5869,7 +6009,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.9.6:
+typescript@*, typescript@^3.9.6:
   version "3.9.6"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.6.tgz#8f3e0198a34c3ae17091b35571d3afd31999365a"
   integrity sha512-Pspx3oKAPJtjNwE92YS05HQoY7z2SFyOpHo9MqJor3BXAGNaPUs83CuVp9VISFkSjyRfiTpmKuAYGJB7S7hOxw==
@@ -6046,6 +6186,80 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
+vscode-css-languageservice@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/vscode-css-languageservice/-/vscode-css-languageservice-4.1.0.tgz#144c8274e0bf1719fa6f773ca684bd1c7ffd634f"
+  integrity sha512-iTX3dTp0Y0RFWhIux5jasI8r9swdiWVB1Z3OrZ10iDHxzkETjVPxAQ5BEQU4ag0Awc8TTg1C7sJriHQY2LO14g==
+  dependencies:
+    vscode-languageserver-textdocument "^1.0.1"
+    vscode-languageserver-types "^3.15.1"
+    vscode-nls "^4.1.1"
+    vscode-uri "^2.1.1"
+
+vscode-emmet-helper@1.2.17:
+  version "1.2.17"
+  resolved "https://registry.yarnpkg.com/vscode-emmet-helper/-/vscode-emmet-helper-1.2.17.tgz#f0c6bfcebc4285d081fb2618e6e5b9a08c567afa"
+  integrity sha512-X4pzcrJ8dE7M3ArFuySF5fgipKDd/EauXkiJwtjBIVRWpVNq0tF9+lNCyuC7iDUwP3Oq7ow/TGssD3GdG96Jow==
+  dependencies:
+    "@emmetio/extract-abbreviation" "0.1.6"
+    jsonc-parser "^1.0.0"
+    vscode-languageserver-types "^3.6.0-next.1"
+
+vscode-html-languageservice@3.0.4-next.15:
+  version "3.0.4-next.15"
+  resolved "https://registry.yarnpkg.com/vscode-html-languageservice/-/vscode-html-languageservice-3.0.4-next.15.tgz#7214ccd9b4a06cf138b5945d9fd88285a0add490"
+  integrity sha512-UmUm3A1ZTj+BloVIyel+5pK/nfsqRfPLXzl8BA9O7v5Cj64vivddABvNf/rW1US8fzdikFNZNloC/4ooqxB2kw==
+  dependencies:
+    vscode-languageserver-textdocument "^1.0.1-next.1"
+    vscode-languageserver-types "^3.15.1"
+    vscode-nls "^4.1.1"
+    vscode-uri "^2.1.1"
+
+vscode-jsonrpc@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/vscode-jsonrpc/-/vscode-jsonrpc-5.0.1.tgz#9bab9c330d89f43fc8c1e8702b5c36e058a01794"
+  integrity sha512-JvONPptw3GAQGXlVV2utDcHx0BiY34FupW/kI6mZ5x06ER5DdPG/tXWMVHjTNULF5uKPOUUD0SaXg5QaubJL0A==
+
+vscode-languageserver-protocol@3.15.3, vscode-languageserver-protocol@^3.15.3:
+  version "3.15.3"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-protocol/-/vscode-languageserver-protocol-3.15.3.tgz#3fa9a0702d742cf7883cb6182a6212fcd0a1d8bb"
+  integrity sha512-zrMuwHOAQRhjDSnflWdJG+O2ztMWss8GqUUB8dXLR/FPenwkiBNkMIJJYfSN6sgskvsF0rHAoBowNQfbyZnnvw==
+  dependencies:
+    vscode-jsonrpc "^5.0.1"
+    vscode-languageserver-types "3.15.1"
+
+vscode-languageserver-textdocument@^1.0.1, vscode-languageserver-textdocument@^1.0.1-next.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.1.tgz#178168e87efad6171b372add1dea34f53e5d330f"
+  integrity sha512-UIcJDjX7IFkck7cSkNNyzIz5FyvpQfY7sdzVy+wkKN/BLaD4DQ0ppXQrKePomCxTS7RrolK1I0pey0bG9eh8dA==
+
+vscode-languageserver-types@3.15.1, vscode-languageserver-types@^3.15.1, vscode-languageserver-types@^3.6.0-next.1:
+  version "3.15.1"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-types/-/vscode-languageserver-types-3.15.1.tgz#17be71d78d2f6236d414f0001ce1ef4d23e6b6de"
+  integrity sha512-+a9MPUQrNGRrGU630OGbYVQ+11iOIovjCkqxajPa9w57Sd5ruK8WQNsslzpa0x/QJqC8kRc2DUxWjIFwoNm4ZQ==
+
+vscode-languageserver@6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver/-/vscode-languageserver-6.1.1.tgz#d76afc68172c27d4327ee74332b468fbc740d762"
+  integrity sha512-DueEpkUAkD5XTR4MLYNr6bQIp/UFR0/IPApgXU3YfCBCB08u2sm9hRCs6DxYZELkk++STPjpcjksR2H8qI3cDQ==
+  dependencies:
+    vscode-languageserver-protocol "^3.15.3"
+
+vscode-nls@^4.1.1:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/vscode-nls/-/vscode-nls-4.1.2.tgz#ca8bf8bb82a0987b32801f9fddfdd2fb9fd3c167"
+  integrity sha512-7bOHxPsfyuCqmP+hZXscLhiHwe7CSuFE4hyhbs22xPIhQ4jv99FcR4eBzfYYVLP356HNFpdvz63FFb/xw6T4Iw==
+
+vscode-uri@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/vscode-uri/-/vscode-uri-2.1.1.tgz#5aa1803391b6ebdd17d047f51365cf62c38f6e90"
+  integrity sha512-eY9jmGoEnVf8VE8xr5znSah7Qt1P/xsCdErz+g8HYZtJ7bZqKH5E3d+6oVNm1AC/c6IHUDokbmVXKOi4qPAC9A==
+
+vscode-uri@^2.1.1:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/vscode-uri/-/vscode-uri-2.1.2.tgz#c8d40de93eb57af31f3c715dd650e2ca2c096f1c"
+  integrity sha512-8TEXQxlldWAuIODdukIb+TR5s+9Ds40eSJrw+1iDDA9IFORPjMELarNQE3myz5XIkWWpdprmJjm1/SxMlWOC8A==
+
 w3c-hr-time@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/w3c-hr-time/-/w3c-hr-time-1.0.2.tgz#0a89cdf5cc15822df9c360543676963e0cc308cd"
@@ -6212,6 +6426,11 @@ y18n@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-4.0.0.tgz#95ef94f85ecc81d007c264e190a120f0a3c8566b"
   integrity sha512-r9S/ZyXu/Xu9q1tYlpsLIsa3EeLXXk0VwlxqTcFRfg9EhMW+17kbt9G0NrgCmhGb5vT2hyhJZLfDGx+7+5Uj/w==
+
+yaml@^1.7.2:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.0.tgz#3b593add944876077d4d683fee01081bd9fff31e"
+  integrity sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==
 
 yargs-parser@13.1.2, yargs-parser@^13.1.2:
   version "13.1.2"
