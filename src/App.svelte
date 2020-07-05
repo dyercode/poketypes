@@ -1,9 +1,10 @@
 <script lang="typescript">
-    import { team } from './components/store';
+    // @ts-ignore
+    import { team } from './components/store.ts';
     import Member from './components/Member.svelte';
     import Effectiveness from "./components/Effectiveness.svelte";
 
-    const selecteds = Array(6).fill("");
+    const selecteds: string[] = Array(6).fill("");
 </script>
 
 <style></style>
@@ -13,13 +14,5 @@
     <Member bind:selected={member} index="{i}"/>
 {/each}
 </div>
-
-
-<!--<h2>team sofar</h2>-->
-<!--<ul>-->
-<!--{#each selecteds as member}-->
-<!--    <li>{member}</li>-->
-<!--{/each}-->
-<!--</ul>-->
 
 <Effectiveness team={$team} />

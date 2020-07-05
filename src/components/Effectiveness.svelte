@@ -1,8 +1,12 @@
 <script lang="typescript">
-    import {typedex} from './store';
-    import {Type} from '../model/type';
-    import {Pokemon} from '../model/pokemon';
-    import {Effectiveness, attackEffectiveness} from '../model/effectiveness';
+    // @ts-ignore
+    import {typedex} from './store.ts';
+    // @ts-ignore
+    import {Type} from '../model/type.ts';
+    // @ts-ignore
+    import {Pokemon} from '../model/pokemon.ts';
+    // @ts-ignore
+    import {Effectiveness, attackEffectiveness} from '../model/effectiveness.ts';
 
     const {Half, Double, Immune, Neutral, Quadrouple, Quarter} = Effectiveness;
 

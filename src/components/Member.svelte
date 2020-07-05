@@ -1,8 +1,10 @@
 <script lang="typescript">
     import {onMount} from 'svelte';
     import * as Awesomplete from 'awesomplete';
-    import {team, thinPokedex} from './store'
-    import {getPokemon} from '../PokeApi';
+    // @ts-ignore
+    import {team, thinPokedex} from './store.ts'
+    // @ts-ignore
+    import {getPokemon} from '../PokeApi.ts';
 
     export let selected: string;
     export let index: number;
