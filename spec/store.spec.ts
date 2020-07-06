@@ -2,7 +2,6 @@ import 'mocha'
 import {expect} from 'chai'
 import {Type} from "../src/model/type";
 import {config, typedex, typedexRaw} from "../src/components/store";
-import {Config} from "../src/components/config";
 import {get} from 'svelte/store';
 
 const shadowType = {

@@ -24,7 +24,7 @@
         input.addEventListener('blur', (it) => {
             const text: string = (it.target as HTMLInputElement).value;
             if (!text || !$thinPokedex.includes(text)) {
-                team.update(current => {
+                team.update((current: Pokemon[]) => {
                     current[index] = null;
                     return current;
                 });
