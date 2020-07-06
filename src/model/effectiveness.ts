@@ -1,4 +1,4 @@
-import {Type} from "./type";
+import { Type } from "./type";
 
 export enum Effectiveness {
     Immune = 1,
@@ -9,28 +9,22 @@ export enum Effectiveness {
     Quadrouple
 }
 
-const {Half, Double, Immune, Neutral, Quadrouple, Quarter} = Effectiveness;
+const { Half, Double, Immune, Neutral, Quadrouple, Quarter } = Effectiveness;
 
 const singleTypeEffectiveness = (attack: Type) => (defenseType: Type): Effectiveness => {
     const doubles: Effectiveness[] =
         defenseType.doubleDamageFrom.flatMap((effectiveName) => {
-            if (effectiveName === attack.name) {
-                return [Double];
-            } else return [];
+            return (effectiveName === attack.name) ? [Double] : [];
         });
 
     const half: Effectiveness[] =
         defenseType.halfDamageFrom.flatMap((effectiveName) => {
-            if (effectiveName === attack.name) {
-                return [Half];
-            } else return [];
+            return (effectiveName === attack.name) ? [Half] : [];
         });
 
     const immune: Effectiveness[] =
         defenseType.noDamageFrom.flatMap((effectiveName) => {
-            if (effectiveName === attack.name) {
-                return [Immune];
-            } else return [];
+            return (effectiveName === attack.name) ? [Immune] : [];
         });
 
     return [doubles, half, immune].flat()[0] || Neutral;
@@ -60,7 +54,6 @@ function lookup(types: Effectiveness[]): Effectiveness {
 }
 
 export function attackEffectiveness(attack: Type, defenseTypes: Type[]): Effectiveness {
-    const individualEffectivenesses = defenseTypes.map(singleTypeEffectiveness(attack))
+    const individualEffectivenesses: Effectiveness[] = defenseTypes.map(singleTypeEffectiveness(attack))
     return lookup(individualEffectivenesses);
 }
-
