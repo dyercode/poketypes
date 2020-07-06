@@ -2,7 +2,7 @@
     // @ts-ignore
     import { team } from './components/store.ts';
     import Member from './components/Member.svelte';
-    import Effectiveness from "./components/Effectiveness.svelte";
+    import Effectiveness from "./components/effectiveness/Effectiveness.svelte";
 
     const selecteds: string[] = Array(6).fill("");
 </script>

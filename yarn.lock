@@ -5667,10 +5667,10 @@ supports-color@^6.1.0:
   dependencies:
     has-flag "^3.0.0"
 
-svelte-check@^0.1.42:
-  version "0.1.42"
-  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-0.1.42.tgz#0ec1d731e861b687bcac4dce5e50699c2ef44daf"
-  integrity sha512-OJXlZtWk9EtqQ6jlcHkeI1mHE9gGmHfmwTIPg17MB2Vo6IOCCXYUkL0eWSvx/LFrEpjC1B6MopMMCTJXDD/Abw==
+svelte-check@^0.1.43:
+  version "0.1.43"
+  resolved "https://registry.yarnpkg.com/svelte-check/-/svelte-check-0.1.43.tgz#1495e2d5840dc1bb076c7a40ec9d00db3178a592"
+  integrity sha512-zRWzc90k2DsfOqsAisPW0mv4hzoYzmhPUtcATJCgTQikU/MBOuoJzvjR5l4KHB/qINZz1QAS1JLR7K0dltI2wg==
   dependencies:
     chalk "^4.0.0"
     glob "^7.1.6"

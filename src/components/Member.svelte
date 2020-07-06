@@ -1,4 +1,6 @@
 <script lang="typescript">
+    // @ts-ignore
+    import { Pokemon } from '../model/pokemon.ts';
     import {onMount} from 'svelte';
     import * as Awesomplete from 'awesomplete';
     // @ts-ignore
@@ -15,7 +17,7 @@
     onMount(() => {
         let input = document.getElementById(`member-${index}`)
         let ap = new Awesomplete(input, {list: `pokedex-${index}`});
-        thinPokedex.subscribe((list) => {
+        thinPokedex.subscribe((list: Pokemon[]) => {
             ap.list = list;
             ap.evaluate();
         });
@@ -27,9 +29,9 @@
                     return current;
                 });
             } else {
-                getPokemon(text).then(newMon => {
+                getPokemon(text).then((newMon: Pokemon) => {
                     selected = text;
-                    team.update(current => {
+                    team.update((current: Pokemon[]) => {
                         current[index] = newMon;
                         return current;
                     })
@@ -50,7 +52,7 @@
 
 <input type="text" id="member-{index}" placeholder="Gotta catch at least one" list="pokedex-{index}"/>
 <datalist id="pokedex-{index}">
-    {#each $thinPokedex as  poke }
+    {#each $thinPokedex as poke }
         <option>{poke}</option>
     {/each}
 </datalist>
