@@ -1,12 +1,9 @@
 <script lang="typescript">
-    // @ts-ignore
-    import { Pokemon } from '../model/pokemon.ts';
-    import {onMount} from 'svelte';
     import * as Awesomplete from 'awesomplete';
-    // @ts-ignore
-    import {team, thinPokedex} from './store.ts'
-    // @ts-ignore
-    import {getPokemon} from '../PokeApi.ts';
+    import { Pokemon } from '../model/pokemon';
+    import {onMount} from 'svelte';
+    import {team, thinPokedex} from './store'
+    import {getPokemon} from '../PokeApi';
 
     export let selected: string;
     export let index: number;
@@ -16,14 +13,14 @@
     }
     onMount(() => {
         let input = document.getElementById(`member-${index}`)
-        let ap = new Awesomplete(input, {list: `pokedex-${index}`});
-        thinPokedex.subscribe((list: Pokemon[]) => {
+        let ap: Awesomplete = new Awesomplete(input, {list: `pokedex-${index}`});
+        thinPokedex.subscribe((list: string[]) => {
             ap.list = list;
             ap.evaluate();
         });
         input.addEventListener('blur', (it) => {
             const text: string = (it.target as HTMLInputElement).value;
-            if (!text || !$thinPokedex.includes(text)) {
+            if (!text || !(($thinPokedex).includes(text))) {
                 team.update((current: Pokemon[]) => {
                     current[index] = null;
                     return current;

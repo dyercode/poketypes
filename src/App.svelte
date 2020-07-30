@@ -1,6 +1,5 @@
 <script lang="typescript">
-    // @ts-ignore
-    import { team } from './components/store.ts';
+    import { team } from './components/store';
     import Member from './components/Member.svelte';
     import Effectiveness from "./components/effectiveness/Effectiveness.svelte";
 

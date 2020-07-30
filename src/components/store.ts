@@ -13,6 +13,6 @@ const typedex: Readable<Type[]> = derived(typedexRaw, (types: Type[]) => {
     });
 });
 
-const thinPokedex: Writable<Pokemon[]> = writable([])
+const thinPokedex: Writable<string[]> = writable([])
 
 export {config, team, typedexRaw, typedex, thinPokedex}

@@ -5,7 +5,6 @@ import { Type } from '../src/model/type';
 import { Effectiveness } from '../src/model/effectiveness';
 
 describe("Effectiveness", () => {
-    // export function teamEffectiveness(attackType: Type, testEffective: Effectiveness, inteam: Pokemon[], typedex: Type[]) {
     describe("teamEffectiveness", () => {
         describe('given some bad data', () => {
             it('defaults to zero when type not found in dex', () => {
