@@ -1,6 +1,6 @@
 <script lang="typescript">
-    import * as Awesomplete from 'awesomplete';
-    import { Pokemon } from '../model/pokemon';
+    import Awesomplete from 'awesomplete';
+    import type { Pokemon } from '../model/pokemon';
     import {onMount} from 'svelte';
     import {team, thinPokedex} from './store'
     import {getPokemon} from '../PokeApi';
@@ -13,7 +13,7 @@
     }
     onMount(() => {
         let input = document.getElementById(`member-${index}`)
-        let ap: Awesomplete = new Awesomplete(input, {list: `pokedex-${index}`});
+        let ap: Awesomplete = new Awesomplete(input, {list: `#pokedex-${index}`});
         thinPokedex.subscribe((list: string[]) => {
             ap.list = list;
             ap.evaluate();

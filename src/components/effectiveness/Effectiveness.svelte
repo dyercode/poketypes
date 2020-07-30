@@ -1,6 +1,6 @@
 <script lang="typescript">
     import {typedex} from '../store';
-    import {Pokemon} from '../../model/pokemon';
+    import type {Pokemon} from '../../model/pokemon';
     import {Effectiveness} from '../../model/effectiveness';
     import { teamEffectiveness } from './index'
 

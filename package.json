@@ -22,8 +22,8 @@
     "parcel-plugin-svelte": "^4.0.6",
     "sass": "^1.26.10",
     "svelte": "^3.24.0",
-    "svelte-check": "^0.1.55",
-    "svelte-preprocess": "^4.0.8",
+    "svelte-check": "^1.0.1",
+    "svelte-preprocess": "^4.0.9",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
   },
