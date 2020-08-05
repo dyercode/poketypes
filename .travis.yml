@@ -1,1 +1,3 @@
+before_script:
+  - yarn global add mocha
 language: node_js
