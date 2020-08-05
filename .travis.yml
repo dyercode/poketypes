@@ -7,6 +7,8 @@ jobs:
       script: yarn lint
     - stage: compile
       script: yarn build
+    - stage: test
+      script: yarn test
     - stage: deploy
       if: branch = master
       provider: pages
