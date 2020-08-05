@@ -3,14 +3,15 @@ node_js:
   - 12
 jobs:
   include:
-    - stage: lint
+    - stage: test
+      script: yarn test
       script: yarn lint
     - stage: compile
       script: yarn build
-    - stage: test
-      script: yarn test
+      script: pwd
     - stage: deploy
-      script: skip
+      script: ls
+      script: ls dist
       deploy:
         provider: pages
         cleanup: false
