@@ -11,6 +11,7 @@ jobs:
       script: yarn test
     - stage: deploy
       if: branch = master
+      script: skip
       provider: pages
       cleanup: false
       github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
