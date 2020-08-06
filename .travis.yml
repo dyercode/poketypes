@@ -6,6 +6,7 @@ jobs:
     - stage: test
       script: yarn test
       script: yarn lint
+      script: yarn svelte-check
     - stage: compile
       script: yarn build
     - stage: deploy

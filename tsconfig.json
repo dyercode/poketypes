@@ -6,7 +6,8 @@
       "es2019",
       "dom"
     ],
-    "types": ["svelte"]
+    "types": ["svelte"],
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "./src/**/*"
