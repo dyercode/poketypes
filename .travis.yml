@@ -9,7 +9,7 @@ jobs:
     - stage: compile
       script: yarn build
     - stage: deploy
-      script: skip
+      script: yarn build
       deploy:
         provider: pages
         cleanup: false
