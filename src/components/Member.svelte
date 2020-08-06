@@ -1,4 +1,5 @@
 <script lang="typescript">
+    import '../../node_modules/awesomplete/awesomplete.css';
     import Awesomplete from 'awesomplete';
     import type { Pokemon } from '../model/pokemon';
     import {onMount} from 'svelte';
@@ -42,10 +43,6 @@
         });
     });
 </script>
-
-<style>
-    @import '../../node_modules/awesomplete/awesomplete.css';
-</style>
 
 <input type="text" id="member-{index}" placeholder="Gotta catch at least one" list="pokedex-{index}"/>
 <datalist id="pokedex-{index}">
