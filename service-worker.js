@@ -73,4 +73,4 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 },{"./index.js":"wORm"}],"AaGI":[function(require,module,exports) {
 "use strict";var e=require("workbox-routing"),r=require("workbox-strategies");(0,e.registerRoute)(function(e){return"https://pokeapi.co"===e.url.origin},new r.CacheFirst({cacheName:"pokeapi-cache"}));
 },{"workbox-routing":"JU0p","workbox-strategies":"XVv1"}]},{},["AaGI"], null)
-//# sourceMappingURL=/service-worker.js.map
+//# sourceMappingURL=service-worker.js.map
