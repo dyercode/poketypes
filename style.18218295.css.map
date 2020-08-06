@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,mBACI,oBACJ,CAEA,cACI,qBACJ","file":"style.18218295.css","sourceRoot":"../src","sourcesContent":[".autocomplete-list {\n    list-style-type: none;\n}\n\n.key-selected {\n    background-color: yellow;\n}"]}
