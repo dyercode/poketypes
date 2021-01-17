@@ -14,7 +14,6 @@ jobs:
           node-version: "15.x"
       - run: yarn install
       - run: yarn lint
-      - run: yarn check
       - run: yarn test
   deploy:
     runs-on: ubuntu-latest

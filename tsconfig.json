@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "~*": ["./*"]
+    },
     "target": "es2017",
     "lib": [
       "es2019",
