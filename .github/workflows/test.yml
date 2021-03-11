@@ -1,28 +1,28 @@
 name: Node.js CI
 
-on:
-  push:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '15.x'
-    - run: yarn install
-    - run: yarn lint
-    - run: yarn check
-    - run: yarn test
-    - run: yarn build
-    - name: Deploy
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "15.x"
+      - run: yarn install
+      - run: yarn lint
+      - run: yarn check
+      - run: yarn test
+  deploy:
+    if: success() && github.ref == 'refs/heads/main'
+    needs: test
+    steps:
+      run: yarn build
+      name: Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
-          branch: gh-pages
-          folder: dist
+        branch: gh-pages
+        folder: dist
