@@ -17,12 +17,13 @@ jobs:
       - run: yarn check
       - run: yarn test
   deploy:
+    runs-on: ubuntu-latest
     if: success() && github.ref == 'refs/heads/main'
     needs: test
     steps:
-      run: yarn build
-      name: Deploy
-      uses: JamesIves/github-pages-deploy-action@4.1.0
-      with:
-        branch: gh-pages
-        folder: dist
+      - run: yarn build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          branch: gh-pages
+          folder: dist
