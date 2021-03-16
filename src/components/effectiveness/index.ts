@@ -2,7 +2,7 @@ import { Pokemon } from "./../../model/pokemon";
 import { attackEffectiveness, Effectiveness } from "../../model/effectiveness";
 import { Type } from "../../model/type";
 import { Option } from "fp-ts/lib/Option";
-import { array } from "fp-ts";
+import { array } from "fp-ts/lib/Array";
 
 function sum(a: number, b: number) {
   return a + b;
