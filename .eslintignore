@@ -1,5 +1,0 @@
-.cache
-node_modules
-dist
-.eslintrc.js
-svelte.config.js

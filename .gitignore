@@ -1,3 +1,10 @@
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 .cache
 .idea
 *.iml
@@ -6,8 +13,10 @@ dist
 node_modules
 elm-stuff
 *.bs.js
+*.mjs
 .merlin
 *.gen.tsx
 lib
 .parcel-cache
 .direnv
+.bsb.lock

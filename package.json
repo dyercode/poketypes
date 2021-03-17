@@ -5,31 +5,32 @@
   "scripts": {
     "dev": "parcel src/index.html",
     "build": "parcel build src/index.html --public-url .",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx && svelte-check",
-    "test": "mocha"
+    "lint": "reanalyze",
+    "test": "onchange --initial '{tests,src}/*.mjs' -- pta 'spec/*.test.mjs'",
+    "ci": "rescript || rescript build -with-deps && pta 'spec/*.test.mjs'",
+    "re:build": "rescript",
+    "re:start": "rescript build -w -with-deps"
   },
   "devDependencies": {
-    "@types/awesomplete": "^1.1.11",
-    "@types/mocha": "^10.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.48.1",
-    "@typescript-eslint/parser": "^5.48.1",
-    "chai": "^4.3.7",
-    "eslint": "^8.31.0",
-    "mocha": "^10.2.0",
-    "parcel-bundler": "^1.12.5",
-    "parcel-plugin-svelte": "^4.0.9",
+    "@dusty-phillips/rescript-zora": "^3.0.2",
+    "@rescript/react": "^0.11.0",
+    "onchange": "^7.1.0",
+    "parcel": "^2.8.2",
+    "process": "^0.11.10",
+    "pta": "^1.2.0",
+    "reanalyze": "^2.23.0",
+    "rescript": "^10.1.1",
     "sass": "^1.57.1",
-    "svelte": "^3.55.1",
-    "svelte-check": "^3.0.2",
-    "svelte-preprocess": "^5.0.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
+    "zora": "^5.2.0"
   },
   "dependencies": {
-    "awesomplete": "^1.1.5",
-    "fp-ts": "^2.13.1",
+    "@glennsl/rescript-fetch": "^0.1.4",
+    "@ryyppy/rescript-promise": "^2.1.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "workbox": "^0.0.0",
     "workbox-routing": "^6.5.4",
     "workbox-strategies": "^6.5.4"
-  }
+  },
+  "packageManager": "yarn@1.22.19"
 }

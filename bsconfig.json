@@ -1,0 +1,22 @@
+{
+  "name": "poketypes",
+  "jsx": { "version": 4, "mode": "classic" },
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    },
+    { "dir": "spec", "subdirs": true, "type": "dev" }
+  ],
+  "suffix": ".mjs",
+  "package-specs": {
+    "module": "es6",
+    "in-source": true
+  },
+  "bs-dependencies": [
+    "@glennsl/rescript-fetch",
+    "@ryyppy/rescript-promise",
+    "@rescript/react",
+    "@dusty-phillips/rescript-zora"
+  ]
+}

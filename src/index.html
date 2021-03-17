@@ -5,12 +5,16 @@
     <title>PokeTypes</title>
   </head>
   <body>
-    <script src="./index.ts"></script>
+    <div id="react-app"></div>
 
-    <script>
+    <script src="./Index.mjs" type="module"></script>
+    <script type="module">
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
-          navigator.serviceWorker.register("/service-worker.js");
+          navigator.serviceWorker.register(
+            new URL("./service-worker.js", import.meta.url),
+            { type: "module" }
+          );
         });
       }
     </script>
