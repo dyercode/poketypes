@@ -1,5 +1,5 @@
 {
-  "name": "your-project-name",
+  "name": "poketypes",
   "bsc-flags": ["-bs-super-errors"],
   "sources": [
     {
@@ -16,6 +16,5 @@
   "suffix": ".bs.js",
   "namespace": true,
   "bs-dependencies": [],
-  "ppx-flags": [],
-  "refmt": 3
+  "ppx-flags": []
 }

@@ -47,7 +47,7 @@ module Effectiveness: {
 
   let compare = (e1, e2) => order(e1) - order(e2)
 
-  let lookup = (types: array<effectiveness>) => {
+  let lookup: array<effectiveness> => effectiveness = (types: array<effectiveness>) => {
     let sorted: array<effectiveness> = Array.copy(types)
     Array.sort(compare, sorted)
     switch sorted {
@@ -55,21 +55,19 @@ module Effectiveness: {
     | [Immune, _] => Immune
     | [Half, Half] => Quarter
     | [Half, Neutral] => Half
-    | [Half, Double]
-    | [Neutral, Neutral] =>
-      Neutral
+    | [Half, Double] => Neutral
+    | [Neutral, Neutral] => Neutral
     | [Neutral, Double] => Double
-    | [Double, Double] =>
-      Quadruple
-      _ => Neutral
+    | [Double, Double] => Quadruple
+    | _ => Neutral
     }
   }
 
-  export attackEffectiveness = (attackType, defenseTypes) => {
-    let singleTypeEffectiveness: pokemonType => effectiveness = singleTypeEffectiveness(
-      ~attackType,
-      ~defenseType=_,
-    )
+  export attackEffectiveness: (pokemonType, array<pokemonType>) => effectiveness = (
+    attackType,
+    defenseTypes,
+  ) => {
+    let si: pokemonType => effectiveness = singleTypeEffectiveness(~attackType, ~defenseType=_)
     let individualEffectivenesses: array<effectiveness> = Array.map(si, defenseTypes)
     lookup(individualEffectivenesses)
   }
