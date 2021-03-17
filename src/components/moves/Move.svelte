@@ -104,8 +104,3 @@
   id={moveId}
   placeholder="move {moveIndex}"
   value={selected} />
-<datalist id="moves-{index}">
-  {#each $moves as move}
-    <option>{move}</option>
-  {/each}
-</datalist>

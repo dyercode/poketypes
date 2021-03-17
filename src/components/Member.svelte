@@ -49,11 +49,6 @@
     id="member-{index}"
     placeholder="Gotta catch at least one"
     list="pokedex-{index}" />
-  <datalist id="pokedex-{index}">
-    {#each $thinPokedex as poke}
-      <option>{poke}</option>
-    {/each}
-  </datalist>
 
   <Moves bind:index />
 </div>
