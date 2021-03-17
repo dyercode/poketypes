@@ -7,13 +7,16 @@
     "dev": "parcel src/index.html",
     "build": "parcel build src/index.html --public-url .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && svelte-check",
-    "test": "mocha"
+    "test": "mocha",
+    "re:build": "bsb -make-world -clean-world",
+    "re:watch": "bsb -make-world -clean-world -w"
   },
   "devDependencies": {
     "@types/awesomplete": "^1.1.10",
     "@types/mocha": "^8.2.1",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
+    "bs-platform": "^9.0.2",
     "chai": "^4.3.3",
     "eslint": "^7.22.0",
     "mocha": "^8.3.1",

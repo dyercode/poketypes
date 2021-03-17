@@ -5,7 +5,7 @@
   import { teamEffectiveness } from "./index";
   import { Option } from "fp-ts/es6/Option";
 
-  const { Half, Double, Immune, Neutral, Quadrouple, Quarter } = Effectiveness;
+  const { Half, Double, Immune, Neutral, Quadruple, Quarter } = Effectiveness;
 
   export let team: Option<Pokemon>[];
 </script>
@@ -31,7 +31,7 @@
         <td>{teamEffectiveness(type, Half, team, $typedex)}</td>
         <td>{teamEffectiveness(type, Neutral, team, $typedex)}</td>
         <td>{teamEffectiveness(type, Double, team, $typedex)}</td>
-        <td>{teamEffectiveness(type, Quadrouple, team, $typedex)}</td>
+        <td>{teamEffectiveness(type, Quadruple, team, $typedex)}</td>
       </tr>
     {/each}
   </tbody>

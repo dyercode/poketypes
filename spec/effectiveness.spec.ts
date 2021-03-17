@@ -60,7 +60,7 @@ describe("effectiveness", () => {
     });
     it("is 4x if both of it's types are weak", () => {
       expect(attackEffectiveness(dark, [psychic, ghost])).to.equal(
-        Effectiveness.Quadrouple
+        Effectiveness.Quadruple
       );
     });
     it("is quarter if both of it's types are resistant", () => {
