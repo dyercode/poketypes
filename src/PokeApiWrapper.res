@@ -114,29 +114,21 @@ type listApi = {
   results: array<refValue>,
 }
 
-type move = {
-    type: array<refValue>
-}
-type apiType = {
-    type: array<refValue>
-}
-
+type move = {"move": refValue}
+type pokeType = {"type": refValue}
 type pokemonApi = {
   name: string,
-  types: array<apiType>,
+  types: array<pokeType>,
   moves: array<move>,
 }
 
 @scope("JSON") @val
 external rawParseJson: string => pokemonApi = "parse"
 
-// @scope("window") @val
-// external fetch: string => Js.Promise.t<Js.Response> = "fetch"
-
 let fromPokemonApi: pokemonApi => Pokemon.pokemon = (pokeApi: pokemonApi) => {
   name: pokeApi.name,
-  types: pokeApi.types->Belt.Array.map(rv => rv.name),
-  moves: pokeApi.moves->Belt.Array.map(rv => rv.name),
+  types: pokeApi.types->Belt.Array.map(rv => rv["type"].name),
+  moves: pokeApi.moves->Belt.Array.map((rv: move) => rv["move"].name),
   knownMoves: (None, None, None, None),
 }
 
