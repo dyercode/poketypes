@@ -1,9 +1,8 @@
 module Effectiveness: {
-  type effectiveness
-  type pokemonType
-  let attackEffectiveness: (pokemonType, array<pokemonType>) => effectiveness
+  export type effectiveness
+  let attackEffectiveness: (Pokemon.pokemonType, array<Pokemon.pokemonType>) => effectiveness
 } = {
-  type effectiveness =
+  export type effectiveness =
     | Immune
     | Quarter
     | Half
@@ -11,14 +10,10 @@ module Effectiveness: {
     | Double
     | Quadruple
 
-  type pokemonType = {
-    name: string,
-    noDamageFrom: array<string>,
-    halfDamageFrom: array<string>,
-    doubleDamageFrom: array<string>,
-  }
-
-  let singleTypeEffectiveness = (~attackType: pokemonType, ~defenseType: pokemonType) => {
+  let singleTypeEffectiveness = (
+    ~attackType: Pokemon.pokemonType,
+    ~defenseType: Pokemon.pokemonType,
+  ) => {
     let hasAttack = typeList => {
       typeList->Belt.Array.keep(t => t == attackType.name)->Belt.Array.size > 0
     }
@@ -55,19 +50,20 @@ module Effectiveness: {
     | [Immune, _] => Immune
     | [Half, Half] => Quarter
     | [Half, Neutral] => Half
-    | [Half, Double] => Neutral
-    | [Neutral, Neutral] => Neutral
+    | [Half, Double]
+    | [Neutral, Neutral] =>
+      Neutral
     | [Neutral, Double] => Double
     | [Double, Double] => Quadruple
     | _ => Neutral
     }
   }
 
-  export attackEffectiveness: (pokemonType, array<pokemonType>) => effectiveness = (
+  export attackEffectiveness: (Pokemon.pokemonType, array<Pokemon.pokemonType>) => effectiveness = (
     attackType,
     defenseTypes,
   ) => {
-    let si: pokemonType => effectiveness = singleTypeEffectiveness(~attackType, ~defenseType=_)
+    let si = singleTypeEffectiveness(~attackType, ~defenseType=_)
     let individualEffectivenesses: array<effectiveness> = Array.map(si, defenseTypes)
     lookup(individualEffectivenesses)
   }
