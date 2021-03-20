@@ -50,26 +50,36 @@ let fromPokemonApi: pokemonApi => Pokemon.pokemon = (pokeApi: pokemonApi) => {
   knownMoves: (None, None, None, None),
 }
 
+let then_ = Js.Promise.then_
+
 export getPokemon = name =>
   Fetch.fetch(baseUrl ++ pokemonEndpoint ++ name)
-  ->Js.Promise.then_(Fetch.Response.text, _)
-  ->Js.Promise.then_(text => pokemonApiParseJson(text)->Js.Promise.resolve, _)
-  ->Js.Promise.then_(api => fromPokemonApi(api)->Js.Promise.resolve, _)
+  ->then_(Fetch.Response.text, _)
+  ->then_(text => pokemonApiParseJson(text)->Js.Promise.resolve, _)
+  ->then_(api => fromPokemonApi(api)->Js.Promise.resolve, _)
 
-let rec getThinTypedex = (~url=typeListStartUrl, ~dex=[], ()): Js.Promise.t<array<string>> => {
+let rec fetchListApi = (url, dex) => {
   let initResult =
     Fetch.fetch(url)
-    ->Js.Promise.then_(Fetch.Response.text, _)
-    ->Js.Promise.then_(text => listApiParseJson(text)->Js.Promise.resolve, _)
+    ->then_(Fetch.Response.text, _)
+    ->then_(text => listApiParseJson(text)->Js.Promise.resolve, _)
 
-  initResult->Js.Promise.then_((soFar: listApi) => {
+  initResult->then_((soFar: listApi) => {
     let newNames = soFar.results->Belt.Array.map(rv => rv.name)
     let newDex = Belt.Array.concat(dex, newNames)
     switch soFar.next {
-    | Some(s) => getThinTypedex(~dex=newDex, ~url=s, ())
+    | Some(more) => fetchListApi(more, dex)
     | None => Js.Promise.resolve(newDex)
     }
   }, _)
+}
+
+let getThinTypedex = () => {
+  fetchListApi(typeListStartUrl, [])
+}
+
+export rec getPokedex = () => {
+  fetchListApi(pokemonListStartUrl, [])
 }
 
 let getName = rv => rv.name
@@ -83,8 +93,7 @@ let fromTypeApi: typeApi => Pokemon.pokemonType = ta => {
   doubleDamageFrom: ta.damage_relations.double_damage_from->toNames,
 }
 
-let getTypedex = {
-  let then_ = Js.Promise.then_
+export getTypedex = {
   getThinTypedex()->then_(tt => {
     let fullTypes =
       tt->Belt.Array.map(name =>
@@ -94,20 +103,4 @@ let getTypedex = {
       )
     Js.Promise.all(fullTypes)
   }, _)->then_(types => types->Belt.Array.map(fromTypeApi)->Js.Promise.resolve, _)
-}
-
-let rec getPokedex = (~url=pokemonListStartUrl, ~dex=[], ()): Js.Promise.t<array<string>> => {
-  let initResult =
-    Fetch.fetch(url)
-    ->Js.Promise.then_(Fetch.Response.text, _)
-    ->Js.Promise.then_(text => listApiParseJson(text)->Js.Promise.resolve, _)
-
-  initResult->Js.Promise.then_((soFar: listApi) => {
-    let newNames = soFar.results->Belt.Array.map(rv => rv.name)
-    let newDex = Belt.Array.concat(dex, newNames)
-    switch soFar.next {
-    | Some(s) => getPokedex(~dex=newDex, ~url=s, ())
-    | None => Js.Promise.resolve(newDex)
-    }
-  }, _)
 }
