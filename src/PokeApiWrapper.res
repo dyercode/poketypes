@@ -52,17 +52,20 @@ let fromPokemonApi: pokemonApi => Pokemon.pokemon = (pokeApi: pokemonApi) => {
 
 let then_ = Js.Promise.then_
 
-export getPokemon = name =>
-  Fetch.fetch(baseUrl ++ pokemonEndpoint ++ name)
+let fetchApi = (url, jsonParser) => {
+  Fetch.fetch(url)
   ->then_(Fetch.Response.text, _)
-  ->then_(text => pokemonApiParseJson(text)->Js.Promise.resolve, _)
-  ->then_(api => fromPokemonApi(api)->Js.Promise.resolve, _)
+  ->then_(text => jsonParser(text)->Js.Promise.resolve, _)
+}
+
+export getPokemon = name =>
+  fetchApi(baseUrl ++ pokemonEndpoint ++ name, pokemonApiParseJson)->then_(
+    api => fromPokemonApi(api)->Js.Promise.resolve,
+    _,
+  )
 
 let rec fetchListApi = (url, dex) => {
-  let initResult =
-    Fetch.fetch(url)
-    ->then_(Fetch.Response.text, _)
-    ->then_(text => listApiParseJson(text)->Js.Promise.resolve, _)
+  let initResult = fetchApi(url, listApiParseJson)
 
   initResult->then_((soFar: listApi) => {
     let newNames = soFar.results->Belt.Array.map(rv => rv.name)
@@ -78,7 +81,7 @@ let getThinTypedex = () => {
   fetchListApi(typeListStartUrl, [])
 }
 
-export rec getPokedex = () => {
+export getPokedex = () => {
   fetchListApi(pokemonListStartUrl, [])
 }
 
@@ -95,12 +98,8 @@ let fromTypeApi: typeApi => Pokemon.pokemonType = ta => {
 
 export getTypedex = {
   getThinTypedex()->then_(tt => {
-    let fullTypes =
-      tt->Belt.Array.map(name =>
-        Fetch.fetch(baseUrl ++ typeEndpoint ++ name)
-        ->then_(Fetch.Response.text, _)
-        ->then_(fts => typeApiParseJson(fts)->Js.Promise.resolve, _)
-      )
-    Js.Promise.all(fullTypes)
+    tt
+    ->Belt.Array.map(name => fetchApi(baseUrl ++ typeEndpoint ++ name, typeApiParseJson))
+    ->Js.Promise.all
   }, _)->then_(types => types->Belt.Array.map(fromTypeApi)->Js.Promise.resolve, _)
 }
