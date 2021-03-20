@@ -1,12 +1,12 @@
 <script lang="typescript">
-  import "../../node_modules/awesomplete/awesomplete.css";
+  import "../../../node_modules/awesomplete/awesomplete.css";
   import Awesomplete from "awesomplete";
-  import type { Pokemon } from "../model/pokemon";
+  import type { Pokemon } from "../../model/pokemon";
   import { onMount } from "svelte";
-  import { team, thinPokedex } from "./store";
-  import { getPokemon } from "../PokeApi";
+  import { team, thinPokedex } from "../store";
+  import { getPokemon } from "../../PokeApi";
   import { Option, some, none } from "fp-ts/lib/Option";
-  import Moves from "./moves/Moves.svelte";
+  import Moves from "../moves/Moves.svelte";
   import { AwesompleteEvent } from "~typings/AwesomepleteEvent";
 
   export let selected: string;

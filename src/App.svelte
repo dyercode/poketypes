@@ -1,6 +1,6 @@
 <script lang="typescript">
   import { team } from "./components/store";
-  import Member from "./components/Member.svelte";
+  import Member from "./components/member/Member.svelte";
   import Effectiveness from "./components/effectiveness/Effectiveness.svelte";
 
   const selecteds: string[] = Array(6).fill("");
