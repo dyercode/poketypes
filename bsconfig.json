@@ -1,5 +1,6 @@
 {
   "name": "poketypes",
+  "reason": { "react-jsx": 3 },
   "bsc-flags": ["-bs-super-errors"],
   "sources": [
     {
@@ -15,7 +16,7 @@
   ],
   "suffix": ".bs.js",
   "namespace": true,
-  "bs-dependencies": ["bs-fetch"],
+  "bs-dependencies": ["bs-fetch", "reason-react"],
   "ppx-flags": [],
   "gentypeconfig": {
     "language": "typescript"

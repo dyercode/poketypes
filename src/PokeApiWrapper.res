@@ -11,7 +11,7 @@ type refValue = {
 
 type listApi = {
   name: string,
-  next: option<string>,
+  next: Js.Nullable.t<string>,
   results: array<refValue>,
 }
 
@@ -52,17 +52,16 @@ let fromPokemonApi: pokemonApi => Pokemon.pokemon = (pokeApi: pokemonApi) => {
 
 let then_ = Js.Promise.then_
 
-let fetchApi = (url, jsonParser) => {
-  Fetch.fetch(url)
-  ->then_(Fetch.Response.text, _)
-  ->then_(text => jsonParser(text)->Js.Promise.resolve, _)
+let fetchApi = (url: string, jsonParser) => {
+  Fetch.fetch(url)->then_(Fetch.Response.text, _)->then_(text => {
+    jsonParser(text)->Js.Promise.resolve
+  }, _)
 }
 
-export getPokemon = name =>
-  fetchApi(baseUrl ++ pokemonEndpoint ++ name, pokemonApiParseJson)->then_(
-    api => fromPokemonApi(api)->Js.Promise.resolve,
-    _,
-  )
+export getPokemon = name => {
+  let url = baseUrl ++ pokemonEndpoint ++ name
+  fetchApi(url, pokemonApiParseJson)->then_(api => fromPokemonApi(api)->Js.Promise.resolve, _)
+}
 
 let rec fetchListApi = (url, dex) => {
   let initResult = fetchApi(url, listApiParseJson)
@@ -70,9 +69,10 @@ let rec fetchListApi = (url, dex) => {
   initResult->then_((soFar: listApi) => {
     let newNames = soFar.results->Belt.Array.map(rv => rv.name)
     let newDex = Belt.Array.concat(dex, newNames)
-    switch soFar.next {
-    | Some(more) => fetchListApi(more, dex)
+
+    switch Js.Nullable.toOption(soFar.next) {
     | None => Js.Promise.resolve(newDex)
+    | Some(more) => fetchListApi(more, dex)
     }
   }, _)
 }
@@ -99,7 +99,10 @@ let fromTypeApi: typeApi => Pokemon.pokemonType = ta => {
 export getTypedex = {
   getThinTypedex()->then_(tt => {
     tt
-    ->Belt.Array.map(name => fetchApi(baseUrl ++ typeEndpoint ++ name, typeApiParseJson))
+    ->Belt.Array.map(name => {
+      let url = baseUrl ++ typeEndpoint ++ name
+      fetchApi(url, typeApiParseJson)
+    })
     ->Js.Promise.all
   }, _)->then_(types => types->Belt.Array.map(fromTypeApi)->Js.Promise.resolve, _)
 }

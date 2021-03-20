@@ -5101,6 +5101,11 @@ reanalyze@^2.15.0:
   resolved "https://registry.yarnpkg.com/reanalyze/-/reanalyze-2.15.0.tgz#9c2b24e15174cb5982d6ca319012537d76725c2b"
   integrity sha512-FUN/pqgTKs5i+kzi9Mje5deahZHKniOQDyig5UseozDiK81eW77A4iRyN+3UsnontG6K6mAdUcXCU9NpEqZFug==
 
+reason-react@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.9.1.tgz#30a887158200b659aa03e2d75ff4cc54dc462bb0"
+  integrity sha512-nlH0O2TDy9KzOLOW+vlEQk4ExHOeciyzFdoLcsmmiit6hx6H5+CVDrwJ+8aiaLT/kqK5xFOjy4PS7PftWz4plA==
+
 regenerate-unicode-properties@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-8.2.0.tgz#e5de7111d655e7ba60c057dbe9ff37c87e65cdec"
