@@ -72,7 +72,7 @@ let rec fetchListApi = (url, dex) => {
 
     switch Js.Nullable.toOption(soFar.next) {
     | None => Js.Promise.resolve(newDex)
-    | Some(more) => fetchListApi(more, dex)
+    | Some(more) => fetchListApi(more, newDex)
     }
   }, _)
 }
@@ -81,7 +81,7 @@ let getThinTypedex = () => {
   fetchListApi(typeListStartUrl, [])
 }
 
-export getPokedex = () => {
+export getPokedex: Js.Promise.t<array<string>> = {
   fetchListApi(pokemonListStartUrl, [])
 }
 
