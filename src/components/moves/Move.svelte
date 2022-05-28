@@ -12,7 +12,7 @@
     some,
   } from "fp-ts/lib/Option";
   import { derived } from "svelte/store";
-  import { pipe } from "fp-ts/lib/pipeable";
+  import { pipe } from "fp-ts/lib/function";
   import { AwesompleteEvent } from "~typings/AwesomepleteEvent";
   import { beforeUpdate, onMount } from "svelte";
 
