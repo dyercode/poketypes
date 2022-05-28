@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import { typedex } from "../store";
   import type { Pokemon } from "../../model/pokemon";
   import { Effectiveness } from "../../model/effectiveness";

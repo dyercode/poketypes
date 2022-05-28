@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import { team } from "./components/store";
   import Member from "./components/Member.svelte";
   import Effectiveness from "./components/effectiveness/Effectiveness.svelte";

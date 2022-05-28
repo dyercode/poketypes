@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import type { Pokemon } from "../../model/pokemon";
   import { team } from "../store";
   import { Option, isSome } from "fp-ts/lib/Option";

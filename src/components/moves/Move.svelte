@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import Awesomplete from "awesomplete";
   import type { Pokemon } from "../../model/pokemon";
   import { team } from "../store";
