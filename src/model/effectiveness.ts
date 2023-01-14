@@ -32,19 +32,20 @@ const singleTypeEffectiveness = (attack: Type) => (defenseType: Type): Effective
 
 function lookup(types: Effectiveness[]): Effectiveness {
     const sorted = types.slice().sort();
+
     if (sorted.length == 1) {
         return sorted[0];
     } else if (sorted.includes(Immune)) {
         return Immune;
     } else if (sorted.every(val => val === Half)) {
         return Quarter;
-    } else if (sorted === [Half, Neutral]) {
+    } else if (sorted[0] === Half && sorted[1] === Neutral) {
         return Half;
-    } else if (sorted === [Half, Double]) {
+    } else if (sorted[0] === Half && sorted[1] === Double) {
         return Neutral;
-    } else if (sorted === [Neutral, Neutral]) {
+    } else if (sorted.every(val => val === Neutral)) {
         return Neutral;
-    } else if (sorted === [Neutral, Double]) {
+    } else if (sorted[0] === Neutral && sorted[1] === Double) {
         return Double;
     } else if (sorted.every((val) => val === Double)) {
         return Quadrouple;
