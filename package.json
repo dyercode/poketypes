@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@dusty-phillips/rescript-zora": "^3.0.2",
+    "@parcel/transformer-sass": "2.8.2",
     "@rescript/react": "^0.11.0",
     "onchange": "^7.1.0",
     "parcel": "^2.8.2",

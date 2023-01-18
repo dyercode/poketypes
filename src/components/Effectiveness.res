@@ -34,7 +34,7 @@ let make = (~state: Reducers.state) => {
     ->Belt.Array.length
   }
 
-  <table>
+  <table id="effectiveness">
     <thead>
       <tr>
         <th />
