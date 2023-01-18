@@ -7,8 +7,8 @@
     "build": "yarn re:build && parcel build src/index.html --public-url .",
     "lint": "reanalyze",
     "test": "onchange --initial '{tests,src}/*.mjs' -- pta 'spec/*.test.mjs'",
-    "ci": "rescript || rescript build -with-deps && pta 'spec/*.test.mjs'",
-    "re:build": "rescript",
+    "ci": "yarn re:build && pta 'spec/*.test.mjs'",
+    "re:build": "rescript || rescript build -with-deps",
     "re:start": "rescript build -w -with-deps"
   },
   "devDependencies": {
