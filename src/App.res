@@ -24,7 +24,7 @@ let make = () => {
     <Effectiveness state=pokeState />
     <div id="team">
       {React.array(
-        [1, 2, 3, 4, 5, 6]->Belt.Array.mapWithIndex((i, _) =>
+        Belt.Array.range(1, 6)->Belt.Array.map(i =>
           <Member index=i key={string_of_int(i)} state=pokeState dispatch />
         ),
       )}
