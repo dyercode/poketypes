@@ -15,7 +15,7 @@
           nativeBuildInputs = with pkgs; [
             # dev.defaultPackage.${system}
             yarn
-            # python3
+            # python3 # was? needed for yarn for some reason 
           ];
         };
       });
