@@ -27,8 +27,8 @@
   "dependencies": {
     "@glennsl/rescript-fetch": "^0.1.4",
     "@ryyppy/rescript-promise": "^2.1.0",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "workbox": "^0.0.0",
     "workbox-routing": "^6.5.4",
     "workbox-strategies": "^6.5.4"
