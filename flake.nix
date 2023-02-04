@@ -15,7 +15,7 @@
           nativeBuildInputs = with pkgs; [
             # dev.defaultPackage.${system}
             yarn
-            # python3 # was? needed for yarn for some reason 
+            python3 # needed for installing rescript 😢
           ];
         };
       });
