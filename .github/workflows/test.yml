@@ -14,7 +14,7 @@ jobs:
           node-version: 18
           cache: yarn
       - run: yarn install
-      - run: yarn lint
+        # - run: yarn lint # trash tries to run .exe on linux 😢
       - run: yarn ci
   deploy:
     runs-on: ubuntu-latest
