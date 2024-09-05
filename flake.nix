@@ -4,7 +4,7 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     dev.url =
-      "github:dyercode/dev?rev=ffbbd50d25307bcbd3512996ba1a8db0e8b4d385";
+      "github:dyercode/dev";
   };
 
   outputs = { self, nixpkgs, flake-utils, dev }:
@@ -13,7 +13,7 @@
       in {
         devShells.default = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
-            # dev.defaultPackage.${system}
+            dev.packages.${system}.default
             yarn
             python3 # needed for installing rescript 😢
           ];

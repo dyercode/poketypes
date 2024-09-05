@@ -16,7 +16,7 @@ let make = (~state: Reducers.state) => {
     inTeam: array<option<pokemon>>,
     typedex: array<pokemonType>,
   ): int => {
-    let typeLookup = findTypeByName(typedex)
+    let typeLookup = findTypeByName(typedex, ...)
     let lookupTypes = (mon: pokemon): array<pokemonType> =>
       mon.types->Belt.Array.keepMap(typeLookup)
 

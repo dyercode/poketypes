@@ -26,68 +26,61 @@ let ghost: Model.Pokemon.pokemonType = {
   doubleDamageFrom: [darkName],
 }
 
-zora("a single type takes double damage from an attack it takes double damage from", t => {
+zora("a single type takes double damage from an attack it takes double damage from", async t => {
   t->equal(
     Model.Effectiveness.attackEffectiveness(dark, [psychic]),
     Model.Effectiveness.Double,
-    "wasn't double",
+    ~msg="wasn't double",
   )
-  done()
 })
 
-zora("a single type takes is immune to attacks it takes no damage from", t => {
+zora("a single type takes is immune to attacks it takes no damage from", async t => {
   t->equal(
     Model.Effectiveness.attackEffectiveness(psychic, [dark]),
     Model.Effectiveness.Immune,
-    "dark wasn't immune to psychic",
+    ~msg="dark wasn't immune to psychic",
   )
-  done()
 })
 
-zora("a single type takes half damage from attacks it takes half damage from", t => {
+zora("a single type takes half damage from attacks it takes half damage from", async t => {
   t->equal(
     Model.Effectiveness.attackEffectiveness(psychic, [psychic]),
     Model.Effectiveness.Half,
-    "psychic wasn't resistant to psychic",
+    ~msg="psychic wasn't resistant to psychic",
   )
-  done()
 })
 
 zora(
   "a single type takes Neutral damage from an attack it has no weaknesses or resistances to",
-  t => {
+  async t => {
     t->equal(
       Model.Effectiveness.attackEffectiveness(psychic, [ghost]),
       Model.Effectiveness.Neutral,
-      "psychic wasn't resistant to psychic",
+      ~msg="psychic wasn't resistant to psychic",
     )
-    done()
   },
 )
 
-zora("a dual type is immune if one of it's types is immune", t => {
+zora("a dual type is immune if one of it's types is immune", async t => {
   t->equal(
     attackEffectiveness(psychic, [psychic, dark]),
     Model.Effectiveness.Immune,
-    "psychic into psychic/dark",
+    ~msg="psychic into psychic/dark",
   )
-  done()
 })
 
-zora("a dual type is 4x if both of it's types are weak", t => {
+zora("a dual type is 4x if both of it's types are weak", async t => {
   t->equal(
     attackEffectiveness(dark, [psychic, ghost]),
     Model.Effectiveness.Quadruple,
-    "dark into psychic/ghost",
+    ~msg="dark into psychic/ghost",
   )
-  done()
 })
 
-zora("a dual type is quarter if both of it's types are resistant", t => {
+zora("a dual type is quarter if both of it's types are resistant", async t => {
   t->equal(
     attackEffectiveness(ghost, [dark, dark]),
     Model.Effectiveness.Quarter,
-    "ghost into dark/dark",
+    ~msg="ghost into dark/dark",
   )
-  done()
 })

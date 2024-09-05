@@ -1,0 +1,3 @@
+commands:
+  check: "yarn re:build && yarn pta 'spec/*.test.mjs'"
+  run: "yarn re:start & yarn dev"
