@@ -40,9 +40,9 @@ __metadata:
   linkType: hard
 
 "@blakeembrey/template@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "@blakeembrey/template@npm:1.1.0"
-  checksum: 994f2c5f1188880e106bfaff987513aeca6398010c9086590111281b0be5ea51ca2dc76933b4c603960831a6f1b3093366dd1939651588e78381c9a9a74bcb43
+  version: 1.2.0
+  resolution: "@blakeembrey/template@npm:1.2.0"
+  checksum: 5568375e1124de126bf22b7dc58c374be1358a177c04b0a2eb8cbc25a46ecb5a9c5e49d0ecd11d72c3d5d467b178ef568e016ee34cb68615c5dfb21915a767c4
   languageName: node
   linkType: hard
 
