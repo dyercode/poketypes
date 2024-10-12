@@ -1,3 +1,7 @@
 commands:
-  check: "yarn re:build && yarn pta 'spec/*.test.mjs'"
-  run: "yarn re:start & yarn dev"
+  check:
+    - "yarn re:build && yarn pta 'spec/*.test.mjs'"
+    - yarn reanalyze
+  run:
+    - zellij -s card-dev --layout dev.kdl
+    - zellij d card-dev

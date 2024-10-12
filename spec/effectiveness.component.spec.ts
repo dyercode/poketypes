@@ -13,7 +13,7 @@ describe("Effectiveness", () => {
           teamEffectiveness(
             new Type("dark"),
             Effectiveness.Immune,
-            [option.some({ name: "darkmon", types: ["psychic"], moves: [] , knownMoves: {move1: option.none, move2: option.none, move3: option.none, move4: option.none}})],
+            [option.some({ name: "darkmon", types: ["psychic"], moves: [], knownMoves: { move1: option.none, move2: option.none, move3: option.none, move4: option.none } })],
             []
           )
         ).to.equal(0);

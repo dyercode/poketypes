@@ -26,7 +26,7 @@
             dev.packages.${system}.default
             yarn-berry
             python3 # needed for installing rescript 😢
-            # steam-run
+            zellij
           ];
         };
       }

@@ -13,9 +13,12 @@
     "module": "esmodule",
     "in-source": true
   },
+  "bsc-flags": [
+    "-open RescriptCore"
+  ],
   "bs-dependencies": [
+    "@rescript/core",
     "@glennsl/rescript-fetch",
-    "@ryyppy/rescript-promise",
     "@rescript/react",
     "@dusty-phillips/rescript-zora"
   ]

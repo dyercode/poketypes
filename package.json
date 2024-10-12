@@ -7,6 +7,7 @@
     "build": "yarn re:build && parcel build src/index.html --public-url .",
     "lint": "reanalyze",
     "test": "onchange --initial '{tests,src}/*.mjs' -- pta 'spec/*.test.mjs'",
+    "re:analyze": "onchange --initial '{tests,src}/*.mjs' -- reanalyze",
     "ci": "yarn re:build && pta 'spec/*.test.mjs'",
     "re:build": "rescript || rescript build -with-deps",
     "re:start": "rescript build -w -with-deps"
@@ -22,12 +23,11 @@
     "pta": "^1.3.0",
     "reanalyze": "^2.23.0",
     "rescript": "^11.1.4",
-    "sass": "^1.79.4",
+    "sass": "^1.79.5",
     "zora": "^6.0.0"
   },
   "dependencies": {
     "@glennsl/rescript-fetch": "^0.2.2",
-    "@ryyppy/rescript-promise": "^2.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "workbox": "^0.0.0",

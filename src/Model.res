@@ -49,7 +49,7 @@ module Effectiveness = {
     ~defenseType: Pokemon.pokemonType,
   ) => {
     let hasAttack = typeList => {
-      typeList->Belt.Array.keep(t => t == attackType.name)->Belt.Array.size > 0
+      typeList->Array.filter(String.equal(_, attackType.name))->Array.length > 0
     }
 
     if hasAttack(defenseType.doubleDamageFrom) {
@@ -74,11 +74,12 @@ module Effectiveness = {
     }
   }
 
-  let compare = (e1, e2) => order(e1) - order(e2)
+  let compare = (e1, e2) => Ordering.fromInt(order(e1) - order(e2))
+  // let compare = (e1, e2) => Ordering.map(order, Int32.compare) ->Ordering.reverse
 
   let lookup: array<effectiveness> => effectiveness = (types: array<effectiveness>) => {
     let sorted: array<effectiveness> = Array.copy(types)
-    Array.sort(compare, sorted)
+    Array.sort(sorted, compare)
     switch sorted {
     | [e] => e
     | [Immune, _] => Immune
@@ -98,7 +99,7 @@ module Effectiveness = {
     defenseTypes,
   ) => {
     let si = singleTypeEffectiveness(~attackType, ~defenseType=_)
-    let individualEffectivenesses: array<effectiveness> = Array.map(si, defenseTypes)
+    let individualEffectivenesses: array<effectiveness> = Array.map(defenseTypes, si)
     lookup(individualEffectivenesses)
   }
 }

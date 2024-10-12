@@ -5,10 +5,10 @@ let make = (~index, ~state: Reducers.state, ~dispatch) => {
   let onChange = evt => {
     ReactEvent.Form.preventDefault(evt)
     let value: string = ReactEvent.Form.target(evt)["value"]
-    if thinDex->Js.Array2.includes(value) {
-      Js.Promise.then_(pokemon => {
-        Js.Promise.resolve(dispatch(Actions.SetTeam(Some(pokemon), index)))
-      }, PokeApiWrapper.getPokemon(value))->ignore
+    if thinDex->Array.includes(value) {
+      Promise.then(PokeApiWrapper.getPokemon(value), pokemon => {
+        Promise.resolve(dispatch(Actions.SetTeam(Some(pokemon), index)))
+      })->ignore
     } else {
       dispatch(Actions.SetTeam(None, index))
     }
@@ -16,7 +16,7 @@ let make = (~index, ~state: Reducers.state, ~dispatch) => {
   <div className="member">
     <datalist id={datalistId}>
       {React.array(
-        thinDex->Belt.Array.mapWithIndex((i, name) => <option key={string_of_int(i)} value=name />),
+        thinDex->Array.mapWithIndex((name, i) => <option key={string_of_int(i)} value=name />),
       )}
     </datalist>
     <input
@@ -26,6 +26,6 @@ let make = (~index, ~state: Reducers.state, ~dispatch) => {
       list={datalistId}
       onChange
     />
-    <Moves member={state.team->Belt.Array.get(index)->Belt.Option.flatMap(a => a)} />
+    <Moves member={state.team->Array.get(index)->Option.flatMap(a => a)} />
   </div>
 }

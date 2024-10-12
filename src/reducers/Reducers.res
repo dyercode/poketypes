@@ -33,7 +33,7 @@ let reducer = (state, action) => {
       typedex: dex,
     }
   | Actions.SetTeam(newMember, index) =>
-    let newTeam = state.team->Belt.Array.mapWithIndex((i, oldMember) =>
+    let newTeam = state.team->Array.mapWithIndex((oldMember, i) =>
       if i == index {
         newMember
       } else {

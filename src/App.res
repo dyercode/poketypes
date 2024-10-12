@@ -7,14 +7,17 @@ let make = () => {
   React.useEffect0(() => {
     if !pokeState.initialized {
       dispatch(Actions.InitializePokedex)
-      Js.Promise.then_(pokedex => {
-        Js.log(pokedex)
-        Js.Promise.resolve(dispatch(Actions.SetPokedex(pokedex)))
-      }, PokeApiWrapper.getPokedex)->ignore
-      Js.Promise.then_(pokedex => {
-        Js.log(pokedex)
-        Js.Promise.resolve(dispatch(Actions.SetTypedex(pokedex)))
-      }, PokeApiWrapper.getTypedex)->ignore
+      PokeApiWrapper.getPokedex
+      ->Promise.thenResolve(pokedex => {
+        Console.log(pokedex)
+        dispatch(Actions.SetPokedex(pokedex))
+      })
+      ->ignore
+
+      Promise.thenResolve(PokeApiWrapper.getTypedex, pokedex => {
+        Console.log(pokedex)
+        dispatch(Actions.SetTypedex(pokedex))
+      })->ignore
       None
     } else {
       None
@@ -24,7 +27,7 @@ let make = () => {
     <Effectiveness state=pokeState />
     <div id="team">
       {React.array(
-        Belt.Array.range(1, 6)->Belt.Array.map(i =>
+        Array.make(~length=6, 0)->Array.map(i =>
           <Member index=i key={string_of_int(i)} state=pokeState dispatch />
         ),
       )}

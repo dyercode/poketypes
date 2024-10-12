@@ -1,0 +1,22 @@
+layout {
+    pane split_direction="vertical" size="60%" {
+        pane command="yarn" {
+          args "re:start"
+          close_on_exit true
+        }
+        pane command="yarn" {
+          args "re:analyze"
+          close_on_exit true
+        }
+    }
+    pane split_direction="vertical" size="40%" {
+        pane command="yarn" {
+          args "test"
+          close_on_exit true
+        }
+        pane command="yarn" {
+          args "dev"
+          close_on_exit true
+        }
+    }
+}

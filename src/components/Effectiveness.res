@@ -7,7 +7,7 @@ let make = (~state: Reducers.state) => {
   let team: array<option<pokemon>> = state.team
 
   let findTypeByName = (td: array<pokemonType>, name: string): option<pokemonType> => {
-    td->Js.Array2.find((t: pokemonType) => t.name === name)
+    td->Array.find((t: pokemonType) => t.name === name)
   }
 
   let teamEffectiveness = (
@@ -17,12 +17,11 @@ let make = (~state: Reducers.state) => {
     typedex: array<pokemonType>,
   ): int => {
     let typeLookup = findTypeByName(typedex, ...)
-    let lookupTypes = (mon: pokemon): array<pokemonType> =>
-      mon.types->Belt.Array.keepMap(typeLookup)
+    let lookupTypes = (mon: pokemon): array<pokemonType> => mon.types->Array.filterMap(typeLookup)
 
     inTeam
-    ->Belt.Array.keepMap((member: option<pokemon>) => {
-      member->Belt.Option.flatMap(m => {
+    ->Array.filterMap((member: option<pokemon>) => {
+      member->Option.flatMap(m => {
         let memberTypes: array<pokemonType> = lookupTypes(m)
         if attackEffectiveness(attackType, memberTypes) === testEffective {
           Some(m)
@@ -31,7 +30,7 @@ let make = (~state: Reducers.state) => {
         }
       })
     })
-    ->Belt.Array.length
+    ->Array.length
   }
 
   <table id="effectiveness">
@@ -49,10 +48,10 @@ let make = (~state: Reducers.state) => {
     <tbody>
       {React.array(
         typedex
-        ->Belt.Array.keep(t =>
+        ->Array.filter(t =>
           (t.name !== "shadow" || state.useShadow) && (t.name !== "unknown" || state.useUnknown)
         )
-        ->Belt.Array.mapWithIndex((i, t: pokemonType) => {
+        ->Array.mapWithIndex((t: pokemonType, i) => {
           <tr key={string_of_int(i)}>
             <th> {React.string(t.name)} </th>
             <td> {React.int(teamEffectiveness(t, Immune, team, typedex))} </td>
