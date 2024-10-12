@@ -968,12 +968,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rescript/core@npm:^1.5.2":
-  version: 1.5.2
-  resolution: "@rescript/core@npm:1.5.2"
+"@rescript/core@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@rescript/core@npm:1.6.0"
   peerDependencies:
-    rescript: ^11.1.0-rc.7
-  checksum: 10/da9afce46215d864aece064149022c93cc8927d8a99e7f65712692822ec975989492977cf46983babaf01c78b2ecebb550c2ba370ded5a046a848dc2a591b392
+    rescript: ">=11.1.0"
+  checksum: 10/b19c82f9e58ca7b738c0ff7be6e222d621ce462b44f3aa617f72b0d775e94664deb2e5f1218494de4502f1eff19e1428987fcea7190f0822d45aa9aa66b4bdec
   languageName: node
   linkType: hard
 
@@ -1395,6 +1395,15 @@ __metadata:
     fsevents:
       optional: true
   checksum: 10/c327fb07704443f8d15f7b4a7ce93b2f0bc0e6cea07ec28a7570aa22cd51fcf0379df589403976ea956c369f25aa82d84561947e227cd925902e1751371658df
+  languageName: node
+  linkType: hard
+
+"chokidar@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "chokidar@npm:4.0.1"
+  dependencies:
+    readdirp: "npm:^4.0.1"
+  checksum: 10/62749d2173a60cc5632d6c6e0b7024f33aadce47b06d02e55ad03c7b8daaaf2fc85d4296c047473d04387fd992dab9384cc5263c70a3dc3018b7ebecfb5b5217
   languageName: node
   linkType: hard
 
@@ -2762,7 +2771,7 @@ __metadata:
     "@dusty-phillips/rescript-zora": "npm:^5.0.1"
     "@glennsl/rescript-fetch": "npm:^0.2.2"
     "@parcel/transformer-sass": "npm:^2.12.0"
-    "@rescript/core": "npm:^1.5.2"
+    "@rescript/core": "npm:^1.6.0"
     "@rescript/react": "npm:^0.13.0"
     "@ryyppy/rescript-promise": "npm:^2.1.0"
     onchange: "npm:^7.1.0"
@@ -2772,8 +2781,8 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     reanalyze: "npm:^2.23.0"
-    rescript: "npm:^11.1.3"
-    sass: "npm:^1.78.0"
+    rescript: "npm:^11.1.4"
+    sass: "npm:^1.79.4"
     workbox: "npm:^0.0.0"
     workbox-routing: "npm:^7.1.0"
     workbox-strategies: "npm:^7.1.0"
@@ -2906,6 +2915,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"readdirp@npm:^4.0.1":
+  version: 4.0.2
+  resolution: "readdirp@npm:4.0.2"
+  checksum: 10/4ef93103307c7d5e42e78ecf201db58c984c4d66882a27c956250478b49c2444b1ff6aea8ce0f5e4157b2c07ce2fe870ad16c92ebd7c6ff30391ded6e42b9873
+  languageName: node
+  linkType: hard
+
 "readdirp@npm:~3.6.0":
   version: 3.6.0
   resolution: "readdirp@npm:3.6.0"
@@ -2938,14 +2954,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rescript@npm:^11.1.3":
-  version: 11.1.3
-  resolution: "rescript@npm:11.1.3"
+"rescript@npm:^11.1.4":
+  version: 11.1.4
+  resolution: "rescript@npm:11.1.4"
   bin:
     bsc: bsc
     bstracing: lib/bstracing
     rescript: rescript
-  checksum: 10/5c96865aca10c6fb541d0e0939a650ef83895db11d918f0815903c16eaa172fa399f76080c12705e270ee096634edcfd350809e311090d57a8bd81d50ea6e532
+  checksum: 10/2ba71cf76e04000afb025afc245aef0d4c1647c73323f325bbc386f562df5a9fdddf137f6031ac7bb59c935c60174156d7a605a05a70adac8bd76dc0795aa6bd
   languageName: node
   linkType: hard
 
@@ -2993,7 +3009,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.38.0, sass@npm:^1.78.0":
+"sass@npm:^1.38.0":
   version: 1.78.0
   resolution: "sass@npm:1.78.0"
   dependencies:
@@ -3003,6 +3019,19 @@ __metadata:
   bin:
     sass: sass.js
   checksum: 10/a180135addd9108d9a3549e111b2b442a97761bc429ef04374d57ef741d4343378e7092a6cba12e1f94e48b02d9b997cc79e737c0a2b834ad9204a761b14734d
+  languageName: node
+  linkType: hard
+
+"sass@npm:^1.79.4":
+  version: 1.79.4
+  resolution: "sass@npm:1.79.4"
+  dependencies:
+    chokidar: "npm:^4.0.0"
+    immutable: "npm:^4.0.0"
+    source-map-js: "npm:>=0.6.2 <2.0.0"
+  bin:
+    sass: sass.js
+  checksum: 10/82e2ee5c2e46c96818454c7d97bcfb5b36c1c27de3b1e705adad7a49a8b32226c5254cc4c8804f45db2b6aa018848973177274c2b1137d4caf7abb5cb7bbf8b9
   languageName: node
   linkType: hard
 
