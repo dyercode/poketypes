@@ -11,7 +11,7 @@ let make = (~index: int, ~moves: array<string>) => {
         }),
       )}
     </datalist>
-    <label htmlFor={moveId}> {React.string("move " ++ string_of_int(index + 1))} </label>
+    <label htmlFor={moveId}> {React.string("move " ++ string_of_int(index))} </label>
     <input id={moveId} placeholder={"move " ++ index->Int.toString} list={datalistId} />
   </div>
 }

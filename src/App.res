@@ -27,7 +27,7 @@ let make = () => {
     <Effectiveness state=pokeState />
     <div id="team">
       {React.array(
-        Array.make(~length=6, 0)->Array.map(i =>
+        Array.make(~length=6, 0)->Array.mapWithIndex((_, i) =>
           <Member index=i key={string_of_int(i)} state=pokeState dispatch />
         ),
       )}
